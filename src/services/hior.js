@@ -1,9 +1,11 @@
-export function getItems () {
-  console.log('getItems')
-  return ['items']
+import { readPaginatedData } from './datareader'
+
+const API = 'https://acc.api.data.amsterdam.nl/vsd'
+
+export async function getItems () {
+  return readPaginatedData(`${API}/hior_items`)
 }
 
-export function getProperties () {
-  console.log('getProperties')
-  return ['properties']
+export async function getProperties () {
+  return readPaginatedData(`${API}/hior_properties`)
 }

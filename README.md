@@ -34,9 +34,6 @@
     # run eslint tests
     npm run lint
 
-    # run e2e tests
-    npm run e2e
-
     # run unit and lint tests
     npm test
 
@@ -56,8 +53,6 @@ The app is exposed at localhost:8080
     docker-compose run test
 
 ## General structure of the app
-
-## Tests
 
 ## Styling
 

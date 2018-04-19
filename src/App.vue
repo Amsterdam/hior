@@ -4,11 +4,11 @@
 
     <ams-menu>Menu</ams-menu>
 
-    <ams-content>
+    <ams-content class="content">
       <router-view></router-view>
     </ams-content>
 
-    <ams-footer :title="title">Footer</ams-footer>
+    <ams-footer :title="title" class="footer">Footer</ams-footer>
 
     <loading-component></loading-component>
   </div>
@@ -40,4 +40,11 @@ export default {
 
 <!-- Global styling -->
 <style>
+  .content {
+    min-height: calc(100vh - 348px);
+  }
+
+  .footer {
+    min-height: 226px;
+  }
 </style>

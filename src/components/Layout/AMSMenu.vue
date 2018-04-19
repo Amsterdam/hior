@@ -8,6 +8,11 @@
             Home
           </span>
         </router-link>
+        <router-link to="/search" class="nav-link">
+          <span class="linklabel">
+            Search
+          </span>
+        </router-link>
       </nav>
     </div>
   </div>
