@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import '../static/app.scss'
 
 import Vue from 'vue'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -27,11 +27,6 @@ let vueApp = new Vue({
     App
   },
   template: '<App/>',
-  computed: {
-    ...mapGetters([
-      'text'
-    ])
-  },
   methods: {
     ...mapActions({
       setItems: 'setItems',

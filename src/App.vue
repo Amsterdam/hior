@@ -5,7 +5,9 @@
     <ams-menu>Menu</ams-menu>
 
     <ams-content class="content">
-      <router-view></router-view>
+      <div v-if="items && properties">
+        <router-view></router-view>
+      </div>
     </ams-content>
 
     <ams-footer :title="title" class="footer">Footer</ams-footer>
@@ -15,6 +17,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import amsHeader from '@/components/Layout/AMSHeader'
 import amsMenu from '@/components/Layout/AMSMenu'
 import amsContent from '@/components/Layout/AMSContent'
@@ -29,6 +33,12 @@ export default {
     'ams-content': amsContent,
     'ams-footer': amsFooter,
     'loading-component': loadingComponent
+  },
+  computed: {
+    ...mapGetters([
+      'items',
+      'properties'
+    ])
   },
   data () {
     return {

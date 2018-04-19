@@ -37,24 +37,28 @@
       </div>
     </div>
 
-    <h2>Resultaten ({{matchedItems.length}})</h2>
+    <div v-if="matchedItems.length">
+      <h2>Resultaten ({{matchedItems.length}})</h2>
 
-    <card v-for="item in matchedItems" :title="item.reText || item.text" :key="item.text" :collapse="true">
-      <div v-html="item.reDescription || item.description"></div>
-      <!--<p>{{toHex(item.description)}}</p>-->
-      <div class="mt-1 font-weight-bold">
-        <table class="">
-          <tbody>
-          <tr v-for="propType in propertyTypes" :key="propType">
-            <th scope="row">{{propertyTypeName(propType)}}</th>
-            <td>
-              <span class="ml-2">{{item[propType]}}</span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </card>
+      <card v-for="item in matchedItems" :title="item.reText || item.text" :key="item.text" :collapse="true">
+        <div v-html="item.reDescription || item.description"></div>
+        <div class="mt-1 font-weight-bold">
+          <table class="">
+            <tbody>
+            <tr v-for="propType in propertyTypes" :key="propType">
+              <th scope="row">{{propertyTypeName(propType)}}</th>
+              <td>
+                <span class="ml-2">{{item[propType]}}</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </card>
+    </div>
+    <div v-else>
+      <h5>Geen resultaten gevonden</h5>
+    </div>
   </div>
 </template>
 
@@ -126,7 +130,6 @@ export default {
       // console.log(propertyType, this.matchedItems.length)
       const props = _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
       props.forEach(p => {
-        // console.log(p.value, this.matchedItems.filter(i => i[p.name] === p.value))
         p.count = this.matchedItems.filter(i => i[p.name] === p.value).length
       })
       return props
@@ -190,6 +193,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>
