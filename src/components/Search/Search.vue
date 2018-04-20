@@ -40,8 +40,8 @@
     <div v-if="matchedItems.length">
       <h2>Resultaten ({{matchedItems.length}})</h2>
 
-      <card v-for="item in matchedItems" :title="item.reText || item.text" :key="item.text" :collapse="true">
-        <div v-html="item.reDescription || item.description"></div>
+      <card v-for="item in matchedItems" :title="filteredText(item.text, textFilter)" :key="item.text" :collapse="true">
+        <div v-html="filteredText(item.description, textFilter)"></div>
         <div class="mt-1 font-weight-bold">
           <table class="">
             <tbody>
@@ -104,7 +104,7 @@ export default {
       propertyTypes: [],
       selected: {},
       matchedItems: [],
-      textFilter: null
+      textFilter: ''
     }
   },
   watch: {
@@ -116,9 +116,7 @@ export default {
     },
     'textFilter' () {
       abortFilter()
-      if (this.textFilter) {
-        autoFilter = setTimeout(() => this.filterItems(), 250)
-      }
+      autoFilter = setTimeout(() => this.filterItems(), 250)
     }
   },
   methods: {
@@ -127,11 +125,11 @@ export default {
     },
 
     propertyTypeValues (propertyType) {
-      const props = _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
-      props.forEach(p => {
-        p.count = this.matchedItems.filter(i => i[p.name] === p.value).length
-      })
-      return props
+      return _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
+        .map(p => ({
+          ...p,
+          count: this.matchedItems.filter(i => i[p.name] === p.value).length
+        }))
     },
 
     propertyValueSelected (propertyType, value) {
@@ -140,49 +138,40 @@ export default {
 
     clear () {
       abortFilter()
-      this.textFilter = null
+      this.textFilter = ''
       this.propertyTypes.forEach(p => { this.selected[p] = '' })
       this.filterItems()
     },
 
     filterItems () {
-      const reTextFilter = new RegExp(this.textFilter, 'i')
-      this.matchedItems = this.items.filter(item => {
-        if (this.textFilter) {
-          if (!(reTextFilter.test(item.text) || reTextFilter.test(item.description))) {
-            return false
-          }
-          item.reText = filteredText(item.text, this.textFilter)
-          item.reDescription = filteredText(item.description, this.textFilter)
-        } else {
-          item.reText = null
-          item.reDescription = null
-        }
-
-        return this.propertyTypes.reduce((totalResult, prop) => {
-          let result
-          if (this.selected[prop]) {
-            result = this.selected[prop] === item[prop]
-          } else {
-            result = true
-          }
-          return totalResult && result
-        },
-        true)
-      })
+      let reTextFilter
+      try {
+        // Not every text is a valid re, e.g. "a["
+        reTextFilter = new RegExp(this.textFilter, 'i')
+      } catch (e) {
+        return // Wait for better times...
+      }
+      this.matchedItems = this.items.filter(item =>
+        // If a text filter is specified it must match either text of description
+        (!this.textFilter || (reTextFilter.test(item.text) || reTextFilter.test(item.description))) &&
+        this.propertyTypes.reduce((totalResult, prop) =>
+          // if a filter on a property is specified it must match the corresponding item property
+          totalResult && (!this.selected[prop] || this.selected[prop] === item[prop]),
+        true))
     },
+
+    filteredText,
 
     init () {
       if (this.items && this.properties) {
         this.propertyTypes = _.uniq(this.properties.map(p => p.name))
-
         this.items.forEach(item => {
-          item.properties = this.properties.filter(prop => prop.item_id === item.id)
-          item.properties.forEach(prop => { item[prop.name] = prop.value })
-          item.text = item.text.replace(/\n/g, '<br>')
-          item.description = item.description.replace(/\n/g, '<br>')
+          this.properties.filter(prop => prop.item_id === item.id)
+            .forEach(prop => { item[prop.name] = prop.value }) // add property attributes to item
+          const toHtml = text => text.replace(/\n/g, '<br>') // simply translate line breaks
+          item.text = toHtml(item.text)
+          item.description = toHtml(item.description)
         })
-
         this.clear()
       }
     }
