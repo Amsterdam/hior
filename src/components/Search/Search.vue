@@ -1,5 +1,5 @@
 <template>
-  <div v-if="items && properties">
+  <div>
     <div class="form-group">
       <div class="row">
         <div v-for="propType in propertyTypes" :key="propType" class="col-6 mb-1">
@@ -127,7 +127,6 @@ export default {
     },
 
     propertyTypeValues (propertyType) {
-      // console.log(propertyType, this.matchedItems.length)
       const props = _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
       props.forEach(p => {
         p.count = this.matchedItems.filter(i => i[p.name] === p.value).length
