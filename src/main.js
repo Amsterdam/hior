@@ -32,6 +32,11 @@ let vueApp = new Vue({
       setItems: 'setItems',
       setProperties: 'setProperties'
     }),
+
+    /**
+     * Start by loading items and properties
+     * @returns {Promise<void>}
+     */
     async init () {
       const items = await getItems()
       const properties = await getProperties()

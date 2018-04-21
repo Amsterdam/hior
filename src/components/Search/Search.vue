@@ -2,6 +2,7 @@
   <div>
     <div class="form-group">
       <div class="row">
+        <!--Show property filters-->
         <div v-for="propType in propertyTypes" :key="propType" class="col-6 mb-1">
           <label :for="propType">
             {{propertyTypeName(propType)}}
@@ -16,6 +17,7 @@
           </select>
         </div>
 
+        <!--Show text filter-->
         <div class="col-6 mb-1">
           <label for="textFilter">
           Filter op tekst
@@ -27,6 +29,7 @@
                placeholder="Filtertekst">
         </div>
 
+        <!--Show a button to clear all filters-->
         <div class="col-12 text-center">
           <button type="button"
                   class="btn btn-primary mt-1"
@@ -40,8 +43,11 @@
     <div v-if="matchedItems.length">
       <h2>Resultaten ({{matchedItems.length}})</h2>
 
+      <!--Show each matched result in a Card, default collapsed only showing the item text-->
       <card v-for="item in matchedItems" :title="filteredText(item.text, textFilter)" :key="item.text" :collapse="true">
+        <!--The item description-->
         <div v-html="filteredText(item.description, textFilter)"></div>
+        <!--The item properties-->
         <div class="mt-1 font-weight-bold">
           <table class="">
             <tbody>
@@ -82,6 +88,9 @@ const PROPERTY_TYPE_NAMES = {
  */
 let autoFilter
 
+/**
+ * Abort any running timeout on filterItems()
+ */
 function abortFilter () {
   if (autoFilter) {
     clearTimeout(autoFilter)
@@ -120,10 +129,21 @@ export default {
     }
   },
   methods: {
+    /**
+     * Return the name for the propertyType, e.g. 'Stadsdeel' for property type 'Area'
+     * @param propertyType
+     * @returns {*}
+     */
     propertyTypeName (propertyType) {
       return PROPERTY_TYPE_NAMES[propertyType]
     },
 
+    /**
+     * Return the unique values for the property type in the current filtered collection of items
+     * The properties are enriched with a count, specifying how often the value appears
+     * @param propertyType
+     * @returns {*}
+     */
     propertyTypeValues (propertyType) {
       return _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
         .map(p => ({
@@ -132,10 +152,18 @@ export default {
         }))
     },
 
+    /**
+     * Filter the items if a specific property value is selected, e.g. Stadsdeel = 'Centrum'
+     * @param propertyType
+     * @param value
+     */
     propertyValueSelected (propertyType, value) {
       this.filterItems()
     },
 
+    /**
+     * Clear all filters, including stopping any outstanding filter requests
+     */
     clear () {
       abortFilter()
       this.textFilter = ''
@@ -143,6 +171,11 @@ export default {
       this.filterItems()
     },
 
+    /**
+     * Filter the items on basis of the property filters and free text field
+     * The free text field in interpreted as a regex. The try catch prevents
+     * searching for non proper regex's, e.g. a[
+     */
     filterItems () {
       let reTextFilter
       try {
@@ -160,8 +193,14 @@ export default {
         true))
     },
 
+    /**
+     * Expose filteredText to allow formatting item text and description
+     */
     filteredText,
 
+    /**
+     * Determine the property types and link items with properties
+     */
     init () {
       if (this.items && this.properties) {
         this.propertyTypes = _.uniq(this.properties.map(p => p.name))
