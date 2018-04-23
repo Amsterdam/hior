@@ -3,14 +3,14 @@
 
     <div class="container">
       <nav class="nav nav-pills justify-content-end">
-        <router-link to="/" class="nav-link">
+S        <router-link to="/" class="nav-link" :class="{'activelink': $route.name === 'Home'}">
           <span class="linklabel">
-            Home
+            Startpagina
           </span>
         </router-link>
-        <router-link to="/search" class="nav-link">
+        <router-link to="/search" class="nav-link" :class="{'activelink': $route.name === 'Search'}">
           <span class="linklabel">
-            Search
+            Zoek
           </span>
         </router-link>
       </nav>
@@ -29,5 +29,10 @@ export default {
 
 .menu {
   background-color: $ams-lichtgrijs;
+}
+
+.activelink {
+  font-weight: bold;
+  color: $ams-rood;
 }
 </style>
