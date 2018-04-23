@@ -3,7 +3,7 @@
 
     <div class="container">
       <nav class="nav nav-pills justify-content-end">
-S        <router-link to="/" class="nav-link" :class="{'activelink': $route.name === 'Home'}">
+        <router-link to="/" class="nav-link" :class="{'activelink': $route.name === 'Home'}">
           <span class="linklabel">
             Startpagina
           </span>
