@@ -54,21 +54,24 @@
         <a v-for="prop in propertyTypeValues(orderBy)" :key="prop.value"
            v-if="prop.count > 0"
            :href="`#${prop.value}`"
-           class="badge badge-pill badge-primary mr-2">
-          {{prop.value}} ({{prop.count}})
-        </a>
+           class="badge badge-pill mr-1">{{prop.value}} ({{prop.count}})</a>
       </div>
 
       <div v-for="prop in propertyTypeValues(orderBy)" :key="prop.value" v-if="prop.count > 0"
            :title="`${prop.value} (${prop.count})`" :collapse="true" class="mt-2">
 
-        <h5><a :id="prop.value" class="font-weight-bold">{{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})</a></h5>
+        <div class="alert alert-primary mt-3" role="alert">
+          <a :id="prop.value" class="font-weight-bold">
+            {{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})
+          </a>
+        </div>
+
         <!--Show each matched result in a Card, default collapsed only showing the item text-->
         <card v-for="item in itemValues(matchedItems, prop, prop.value)"
-              :title="filteredText(item.text, textFilter)" :subTitle="`${item.Theme}, ${item.Level}, ${item.Type}`" :key="item.text"
+              :title="filteredText(item.htmlText, textFilter)" :subTitle="subTitle(item)" :key="item.text"
               :collapse="true">
           <!--The item description-->
-          <div v-html="filteredText(item.description, textFilter)"></div>
+          <div v-html="filteredText(item.htmlDescription, textFilter)"></div>
           <!--The item properties-->
           <div class="mt-1 font-weight-bold">
             <table class="">
@@ -76,7 +79,7 @@
               <tr v-for="propType in propertyTypes" :key="propType">
                 <th scope="row">{{propertyTypeName(propType)}}</th>
                 <td>
-                  <span class="ml-2">{{item[propType]}}</span>
+                  <span class="ml-2">{{item[propType].join(', ')}}</span>
                 </td>
               </tr>
               </tbody>
@@ -200,9 +203,13 @@ export default {
       let values = _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
         .map(p => ({
           ...p,
-          count: this.matchedItems.filter(i => i[p.name] === p.value).length
+          count: this.matchedItems.filter(i => i[p.name].includes(p.value)).length
         }))
       return _.orderBy(values, ['sortKey'], ['asc'])
+    },
+
+    subTitle (item) {
+      return ['Theme', 'Level', 'Type'].map(propType => item[propType].join(', ')).join(' - ')
     },
 
     /**
@@ -242,7 +249,7 @@ export default {
         (!this.textFilter || (reTextFilter.test(item.text) || reTextFilter.test(item.description))) &&
         this.propertyTypes.reduce((totalResult, prop) =>
           // if a filter on a property is specified it must match the corresponding item property
-          totalResult && (!this.selected[prop] || this.selected[prop] === item[prop]),
+          totalResult && (!this.selected[prop] || item[prop].includes(this.selected[prop])),
         true))
       this.matchedItems = _.orderBy(this.matchedItems, ['sortKey'], ['asc'])
     },
@@ -257,7 +264,7 @@ export default {
     },
 
     itemValues (items, property, value) {
-      return items.filter(item => item[property.name] === value)
+      return items.filter(item => item[property.name].includes(value))
     },
 
     /**
@@ -268,10 +275,16 @@ export default {
         this.propertyTypes = _.uniq(this.properties.map(p => p.name))
         this.items.forEach(item => {
           this.properties.filter(prop => prop.item_id === item.id)
-            .forEach(prop => { item[prop.name] = prop.value }) // add property attributes to item
+            .forEach((prop, i) => {
+              item[prop.name] = []
+            }) // add property attributes to item
+          this.properties.filter(prop => prop.item_id === item.id)
+            .forEach((prop, i) => {
+              item[prop.name].push(prop.value)
+            }) // add property attributes to item
           const toHtml = text => text.replace(/\n/g, '<br>') // simply translate line breaks
-          item.text = toHtml(item.text)
-          item.description = toHtml(item.description)
+          item.htmlText = toHtml(item.text)
+          item.htmlDescription = toHtml(item.description)
           item.sortKey = itemOrder(item)
         })
         this.properties.forEach(prop => { prop.sortKey = propertyOrder(prop) })
