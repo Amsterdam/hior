@@ -1,8 +1,8 @@
 <template>
   <div class="card mt-2">
-    <div class="card-header">
+    <div class="card-header" :class="{'clickHeader': collapse}" @click="toggle">
       <div class="float-right" v-if="collapse">
-        <button class="btn btn-secondary dropdown-toggle" type="button" @click="toggle"></button>
+        <button class="btn btn-secondary dropdown-toggle" type="button"></button>
       </div>
       <h5 v-html="title"></h5>
     </div>
@@ -45,5 +45,8 @@ export default {
   .card {
     page-break-after: always;
   }
+}
+.clickHeader {
+  cursor: pointer;
 }
 </style>
