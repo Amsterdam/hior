@@ -50,9 +50,19 @@
         </button>
       </div>
 
-      <card v-for="prop in propertyTypeValues(orderBy)" :key="prop.value" v-if="prop.count > 0"
-            :title="`${prop.value} (${prop.count})`" :collapse="true">
+      <div class="text-center mt-3">
+        <a v-for="prop in propertyTypeValues(orderBy)" :key="prop.value"
+           v-if="prop.count > 0"
+           :href="`#${prop.value}`"
+           class="badge badge-pill badge-primary mr-2">
+          {{prop.value}} ({{prop.count}})
+        </a>
+      </div>
 
+      <div v-for="prop in propertyTypeValues(orderBy)" :key="prop.value" v-if="prop.count > 0"
+           :title="`${prop.value} (${prop.count})`" :collapse="true" class="mt-2">
+
+        <h5><a :id="prop.value" class="font-weight-bold">{{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})</a></h5>
         <!--Show each matched result in a Card, default collapsed only showing the item text-->
         <card v-for="item in itemValues(matchedItems, prop, prop.value)"
               :title="filteredText(item.text, textFilter)" :subTitle="`${item.Theme}, ${item.Level}, ${item.Type}`" :key="item.text"
@@ -74,7 +84,7 @@
           </div>
         </card>
 
-      </card>
+      </div>
     </div>
     <div v-else>
       <h5>Geen resultaten gevonden</h5>
