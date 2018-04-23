@@ -4,7 +4,8 @@
       <div class="float-right" v-if="collapse">
         <button class="btn btn-secondary dropdown-toggle" type="button"></button>
       </div>
-      <h5 v-html="title"></h5>
+      <h5 v-html="title" class="mb-1"></h5>
+      <div v-if="subTitle" class="small font-weight-bold">{{subTitle}}</div>
     </div>
 
     <div class="card-body" v-if="!collapsed">
@@ -20,6 +21,7 @@ export default {
   name: 'card',
   props: [
     'title',
+    'subTitle',
     'collapse'
   ],
   data () {

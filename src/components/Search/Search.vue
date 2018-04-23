@@ -43,23 +43,37 @@
     <div v-if="matchedItems.length">
       <h2>Resultaten ({{matchedItems.length}})</h2>
 
-      <!--Show each matched result in a Card, default collapsed only showing the item text-->
-      <card v-for="item in matchedItems" :title="filteredText(item.text, textFilter)" :key="item.text" :collapse="true">
-        <!--The item description-->
-        <div v-html="filteredText(item.description, textFilter)"></div>
-        <!--The item properties-->
-        <div class="mt-1 font-weight-bold">
-          <table class="">
-            <tbody>
-            <tr v-for="propType in propertyTypes" :key="propType">
-              <th scope="row">{{propertyTypeName(propType)}}</th>
-              <td>
-                <span class="ml-2">{{item[propType]}}</span>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="text-center">
+        <button type="button" class="btn mr-1" v-for="propType in propertyTypes" :key="propType"
+                @click="orderItemsBy(propType)" :class="{'btn-primary': orderBy === propType}">
+          {{propertyTypeName(propType)}}
+        </button>
+      </div>
+
+      <card v-for="prop in propertyTypeValues(orderBy)" :key="prop.value" v-if="prop.count > 0"
+            :title="`${prop.value} (${prop.count})`" :collapse="true">
+
+        <!--Show each matched result in a Card, default collapsed only showing the item text-->
+        <card v-for="item in itemValues(matchedItems, prop, prop.value)"
+              :title="filteredText(item.text, textFilter)" :subTitle="`${item.Theme}, ${item.Level}, ${item.Type}`" :key="item.text"
+              :collapse="true">
+          <!--The item description-->
+          <div v-html="filteredText(item.description, textFilter)"></div>
+          <!--The item properties-->
+          <div class="mt-1 font-weight-bold">
+            <table class="">
+              <tbody>
+              <tr v-for="propType in propertyTypes" :key="propType">
+                <th scope="row">{{propertyTypeName(propType)}}</th>
+                <td>
+                  <span class="ml-2">{{item[propType]}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </card>
+
       </card>
     </div>
     <div v-else>
@@ -81,6 +95,33 @@ const PROPERTY_TYPE_NAMES = {
   'Source': 'Bron',
   'Level': 'Niveau',
   'Theme': 'Thema'
+}
+
+const LEVEL_ORDER = {
+  'Strategisch Niveau': 1,
+  'Tactisch Niveau': 2,
+  'Operationeel Niveau': 3,
+  'Proces': 4
+}
+
+const TYPE_ORDER = {
+  'Randvoorwaarde': 1,
+  'Uitgangspunt': 2,
+  'Ambitie': 3,
+  'Advies': 4
+}
+
+function itemOrder (item) {
+  return `[${item.Theme}${LEVEL_ORDER[item.Level]}${TYPE_ORDER[item.Type]}]`
+}
+
+function propertyOrder (property) {
+  const X = {
+    'Level': () => LEVEL_ORDER[property.value],
+    'Type': () => TYPE_ORDER[property.value],
+    'Area': () => (property.value === 'Heel Amsterdam' ? 'A' : 'B') + property.value
+  }
+  return X[property.name] ? X[property.name]() : property.value
 }
 
 /**
@@ -113,7 +154,8 @@ export default {
       propertyTypes: [],
       selected: {},
       matchedItems: [],
-      textFilter: ''
+      textFilter: '',
+      orderBy: 'Theme'
     }
   },
   watch: {
@@ -145,11 +187,12 @@ export default {
      * @returns {*}
      */
     propertyTypeValues (propertyType) {
-      return _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
+      let values = _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
         .map(p => ({
           ...p,
           count: this.matchedItems.filter(i => i[p.name] === p.value).length
         }))
+      return _.orderBy(values, ['sortKey'], ['asc'])
     },
 
     /**
@@ -191,12 +234,21 @@ export default {
           // if a filter on a property is specified it must match the corresponding item property
           totalResult && (!this.selected[prop] || this.selected[prop] === item[prop]),
         true))
+      this.matchedItems = _.orderBy(this.matchedItems, ['sortKey'], ['asc'])
     },
 
     /**
      * Expose filteredText to allow formatting item text and description
      */
     filteredText,
+
+    orderItemsBy (property) {
+      this.orderBy = property
+    },
+
+    itemValues (items, property, value) {
+      return items.filter(item => item[property.name] === value)
+    },
 
     /**
      * Determine the property types and link items with properties
@@ -210,7 +262,9 @@ export default {
           const toHtml = text => text.replace(/\n/g, '<br>') // simply translate line breaks
           item.text = toHtml(item.text)
           item.description = toHtml(item.description)
+          item.sortKey = itemOrder(item)
         })
+        this.properties.forEach(prop => { prop.sortKey = propertyOrder(prop) })
         this.clear()
       }
     }
