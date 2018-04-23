@@ -41,7 +41,7 @@
     </div>
 
     <div v-if="matchedItems.length">
-      <h2>Resultaten ({{matchedItems.length}})</h2>
+      <h2 id="top">Resultaten ({{matchedItems.length}})</h2>
 
       <div class="text-center">
         <button type="button" class="btn mr-1" v-for="propType in propertyTypes" :key="propType"
@@ -64,6 +64,7 @@
           <a :id="prop.value" class="font-weight-bold">
             {{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})
           </a>
+          <a class="btn btn-sm btn-primary top-link" href="#top">&#x25B2;</a>
         </div>
 
         <!--Show each matched result in a Card, default collapsed only showing the item text-->
@@ -297,3 +298,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.top-link {
+  text-decoration: none;
+}
+</style>
