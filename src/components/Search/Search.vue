@@ -125,7 +125,7 @@ const TYPE_ORDER = {
 }
 
 function itemOrder (item) {
-  return `[${item.Theme}${LEVEL_ORDER[item.Level]}${TYPE_ORDER[item.Type]}]`
+  return `${item.Theme[0]}.${LEVEL_ORDER[item.Level[0]]}.${TYPE_ORDER[item.Type[0]]}`
 }
 
 function propertyOrder (property) {
