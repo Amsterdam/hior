@@ -76,8 +76,17 @@
         <card v-for="item in itemValues(matchedItems, prop, prop.value)"
               :title="filteredText(item.htmlText, textFilter)" :subTitle="subTitle(item)" :key="item.text"
               :collapse="true">
+
           <!--The item description-->
           <div v-html="filteredText(item.htmlDescription, textFilter)"></div>
+
+          <!--Images-->
+          <div class="text-center">
+            <a v-for="img in item.Images" :key="img" :href="BASE_URL + img" target="_blank" :title="img">
+              <img class="item-image ml-3" :src="BASE_URL + img"/>
+            </a>
+          </div>
+
           <!--The item properties-->
           <div class="mt-1 font-weight-bold">
             <table class="">
@@ -143,6 +152,8 @@ function propertyOrder (property) {
   return X[property.name] ? X[property.name]() : property.value
 }
 
+const BASE_URL = 'https://131f4363709c46b89a6ba5bc764b38b9.objectstore.eu/hior/'
+
 /**
  * autofilter timeout
  */
@@ -162,7 +173,8 @@ export default {
   computed: {
     ...mapGetters([
       'items',
-      'properties'
+      'properties',
+      'attributes'
     ])
   },
   components: {
@@ -174,7 +186,8 @@ export default {
       selected: {},
       matchedItems: [],
       textFilter: '',
-      orderBy: 'Theme'
+      orderBy: 'Theme',
+      BASE_URL
     }
   },
   watch: {
@@ -277,17 +290,16 @@ export default {
      * Determine the property types and link items with properties
      */
     init () {
-      if (this.items && this.properties) {
+      if (this.items && this.properties && this.attributes) {
         this.propertyTypes = _.uniq(this.properties.map(p => p.name))
         this.items.forEach(item => {
-          this.properties.filter(prop => prop.item_id === item.id)
-            .forEach((prop, i) => {
-              item[prop.name] = []
-            }) // add property attributes to item
-          this.properties.filter(prop => prop.item_id === item.id)
-            .forEach((prop, i) => {
-              item[prop.name].push(prop.value)
-            }) // add property attributes to item
+          ['properties', 'attributes'].forEach(coll => {
+            this[coll].filter(el => el.item_id === item.id)
+              .forEach(el => { item[el.name] = [] })
+            this[coll].filter(el => el.item_id === item.id)
+              .forEach(el => { item[el.name].push(el.value) })
+          })
+
           const toHtml = text => text.replace(/\n/g, '<br>') // simply translate line breaks
           item.htmlText = toHtml(item.text)
           item.htmlDescription = toHtml(item.description)
@@ -307,5 +319,8 @@ export default {
 <style scoped>
 .top-link {
   text-decoration: none;
+}
+.item-image {
+  max-width: 250px;
 }
 </style>

@@ -5,7 +5,7 @@
     <ams-menu>Menu</ams-menu>
 
     <ams-content class="content">
-      <div v-if="items && properties">
+      <div v-if="items && properties && attributes">
         <router-view></router-view>
       </div>
     </ams-content>
@@ -37,7 +37,8 @@ export default {
   computed: {
     ...mapGetters([
       'items',
-      'properties'
+      'properties',
+      'attributes'
     ])
   },
   data () {

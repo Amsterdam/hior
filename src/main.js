@@ -11,7 +11,7 @@ import VueAxios from 'vue-axios'
 import App from './App'
 import router from './router'
 import store from './store'
-import { getItems, getProperties } from './services/hior'
+import { getAttributes, getItems, getProperties } from './services/hior'
 
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
@@ -28,7 +28,8 @@ let vueApp = new Vue({
   methods: {
     ...mapActions({
       setItems: 'setItems',
-      setProperties: 'setProperties'
+      setProperties: 'setProperties',
+      setAttributes: 'setAttributes'
     }),
 
     /**
@@ -38,9 +39,11 @@ let vueApp = new Vue({
     async init () {
       const items = await getItems()
       const properties = await getProperties()
+      const attributes = await getAttributes()
 
       this.setItems(items)
       this.setProperties(properties)
+      this.setAttributes(attributes)
     }
   }
 })

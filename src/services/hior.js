@@ -17,3 +17,11 @@ export async function getItems () {
 export async function getProperties () {
   return readPaginatedData(`${API}/hior_properties`)
 }
+
+/**
+ * Get the HIOR attributes; item_id (reference to HIOR item), name (e.g. "Image"), value (e.g. "pic.jpg")
+ * @returns {Promise<Array>}
+ */
+export async function getAttributes () {
+  return readPaginatedData(`${API}/hior_attributes`)
+}

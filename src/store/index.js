@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     // Register all state data in the state object
     items: null,
-    properties: null
+    properties: null,
+    attributes: null
   },
   actions: {
     // Actions are available to manipulate the state
@@ -22,6 +23,9 @@ export default new Vuex.Store({
     },
     setProperties (store, properties) {
       store.commit('properties', properties)
+    },
+    setAttributes (store, attributes) {
+      store.commit('attributes', attributes)
     }
   },
   mutations: {
@@ -32,6 +36,9 @@ export default new Vuex.Store({
     },
     properties (state, properties) {
       state.properties = properties
+    },
+    attributes (state, attributes) {
+      state.attributes = attributes
     }
   },
   getters: {
@@ -47,6 +54,9 @@ export default new Vuex.Store({
     },
     properties: state => {
       return state.properties
+    },
+    attributes: state => {
+      return state.attributes
     }
   }
 })
