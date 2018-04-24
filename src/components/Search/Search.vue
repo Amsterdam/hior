@@ -60,11 +60,16 @@
       <div v-for="prop in propertyTypeValues(orderBy)" :key="prop.value" v-if="prop.count > 0"
            :title="`${prop.value} (${prop.count})`" :collapse="true" class="mt-2">
 
+        <a :id="prop.value"></a>
         <div class="alert alert-primary mt-3" role="alert">
-          <a :id="prop.value" class="font-weight-bold">
-            {{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})
-          </a>
-          <a class="btn btn-sm btn-primary top-link" href="#top">&#x25B2;</a>
+          <div class="text-right">
+            <div class="float-left">
+              <div class="font-weight-bold">
+                {{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})
+              </div>
+            </div>
+            <a class="btn btn-sm btn-primary top-link" href="#top">&#x25B2;</a>
+          </div>
         </div>
 
         <!--Show each matched result in a Card, default collapsed only showing the item text-->

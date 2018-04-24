@@ -2,7 +2,10 @@
   <div class="card mt-2">
     <div class="card-header" :class="{'click-header': collapse}" @click="toggle">
       <div class="float-right" v-if="collapse">
-        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"></button>
+        <button class="btn btn-sm btn-secondary ml-2" type="button">
+          <span v-if="collapsed">&#x25BC;</span>
+          <span v-else>&#x25B2;</span>
+        </button>
       </div>
       <h5 v-html="title" class="mb-1"></h5>
       <div v-if="subTitle" class="small font-weight-bold">{{subTitle}}</div>
