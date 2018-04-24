@@ -64,7 +64,7 @@
         <div class="alert alert-primary mt-3" role="alert">
           <div class="text-right">
             <div class="float-left">
-              <div class="font-weight-bold">
+              <div class="font-weight-bold mt-1">
                 {{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})
               </div>
             </div>
