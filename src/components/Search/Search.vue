@@ -81,8 +81,8 @@
           <div v-html="filteredText(item.htmlDescription, textFilter)"></div>
 
           <!--Images-->
-          <div class="text-center">
-            <a v-for="img in item.Images" :key="img" :href="BASE_URL + img" target="_blank" :title="img">
+          <div class="text-center mt-2">
+            <a v-for="img in item.Image" :key="img" :href="BASE_URL + img" target="_blank" :title="img">
               <img class="item-image ml-3" :src="BASE_URL + img"/>
             </a>
           </div>
@@ -94,7 +94,12 @@
               <tr v-for="propType in propertyTypes" :key="propType">
                 <th scope="row">{{propertyTypeName(propType)}}</th>
                 <td>
-                  <span class="ml-2">{{item[propType].join(', ')}}</span>
+                  <div class="ml-2">
+                    <a v-if="propType === 'Source'" :href="BASE_URL + bronLink(item)" target="_blank" :title="item[propType][0]">
+                      {{item[propType][0]}}
+                    </a>
+                    <span v-else>{{item[propType].join(', ')}}</span>
+                  </div>
                 </td>
               </tr>
               </tbody>
@@ -194,6 +199,9 @@ export default {
     'items' (to, from) {
       this.init()
     },
+    'attributes' (to, from) {
+      this.init()
+    },
     'properties' (to, from) {
       this.init()
     },
@@ -238,6 +246,16 @@ export default {
      */
     propertyValueSelected (propertyType, value) {
       this.filterItems()
+    },
+
+    bronLink (item) {
+      const linkData = item.SourceLink[0].match(/^(.*) \((\d+)\)$/)
+      try {
+        const [, title, year] = linkData
+        return `Documenten/${year} ${title}.pdf`
+      } catch (e) {
+        return ''
+      }
     },
 
     /**
