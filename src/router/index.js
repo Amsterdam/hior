@@ -7,8 +7,7 @@ import Sources from '../components/Sources'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: '/hior',
+  // mode: 'history',
   routes: [
     {
       path: '/',
