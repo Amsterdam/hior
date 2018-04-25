@@ -70,11 +70,9 @@ export default {
             link: image
           }))
       }
-      console.log('init', this.sources, this.images)
     }
   },
   mounted () {
-    console.log('mounted')
     this.init()
   }
 }
