@@ -25,3 +25,11 @@ export async function getProperties () {
 export async function getAttributes () {
   return readPaginatedData(`${API}/hior_attributes`)
 }
+
+/**
+ * Get the FAQ; question, answer
+ * @returns {Promise<Array>}
+ */
+export async function getFAQ () {
+  return readPaginatedData(`${API}/hior_faq`)
+}

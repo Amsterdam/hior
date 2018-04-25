@@ -8,7 +8,8 @@ export default new Vuex.Store({
     // Register all state data in the state object
     items: null,
     properties: null,
-    attributes: null
+    attributes: null,
+    faq: null
   },
   actions: {
     // Actions are available to manipulate the state
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     //       setText: 'setText'
     //     })
     //  }
+    setFAQ (store, faq) {
+      store.commit('faq', faq)
+    },
     setItems (store, items) {
       store.commit('items', items)
     },
@@ -31,6 +35,9 @@ export default new Vuex.Store({
   mutations: {
     // The real manipulation of the state is by means of a mutation
     // Mutations are triggered by commits, this is normally done in an action
+    faq (state, faq) {
+      state.faq = faq
+    },
     items (state, items) {
       state.items = items
     },
@@ -49,6 +56,9 @@ export default new Vuex.Store({
     //       'text'
     //     ])
     //   }
+    faq: state => {
+      return state.faq
+    },
     items: state => {
       return state.items
     },

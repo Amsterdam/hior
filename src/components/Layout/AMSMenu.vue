@@ -13,6 +13,11 @@
             Zoek
           </span>
         </router-link>
+        <router-link to="/faq" class="nav-link" :class="{'activelink': $route.name === 'FAQ'}">
+          <span class="linklabel">
+            FAQ
+          </span>
+        </router-link>
       </nav>
     </div>
   </div>
