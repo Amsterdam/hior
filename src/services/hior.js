@@ -1,6 +1,6 @@
 import { readPaginatedData } from './datareader'
 
-const API = 'https://acc.api.data.amsterdam.nl/vsd'
+const API = 'https://api.data.amsterdam.nl/vsd'
 
 /**
  * Get the HIOR items; text, description
