@@ -82,8 +82,8 @@
 
           <!--Images-->
           <div class="text-center mt-2">
-            <a v-for="img in item.Image" :key="img" :href="BASE_URL + img" target="_blank" :title="img">
-              <img class="item-image ml-3" :src="BASE_URL + img"/>
+            <a v-for="img in item.Image" :key="img" :href="`${BASE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
+              <img class="item-image ml-3" :src="`${BASE_URL}Afbeeldingen/${img}`"/>
             </a>
           </div>
 
@@ -95,7 +95,8 @@
                 <th scope="row">{{propertyTypeName(propType)}}</th>
                 <td>
                   <div class="ml-2">
-                    <a v-if="propType === 'Source'" :href="BASE_URL + bronLink(item)" target="_blank" :title="item[propType][0]">
+                    <a v-if="propType === 'Source' && !item.SourceLink[0].includes('(voormalig)')"
+                       :href="`${BASE_URL}Documenten/${item.SourceLink[0]}.pdf`" target="_blank" :title="item[propType][0]">
                       {{item[propType][0]}}
                     </a>
                     <span v-else>{{item[propType].join(', ')}}</span>
@@ -246,16 +247,6 @@ export default {
      */
     propertyValueSelected (propertyType, value) {
       this.filterItems()
-    },
-
-    bronLink (item) {
-      const linkData = item.SourceLink[0].match(/^(.*) \((\d+)\)$/)
-      try {
-        const [, title, year] = linkData
-        return `Documenten/${year} ${title}.pdf`
-      } catch (e) {
-        return ''
-      }
     },
 
     /**

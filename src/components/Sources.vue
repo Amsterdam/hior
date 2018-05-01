@@ -2,13 +2,13 @@
   <div>
 
     <h2>Bronnen</h2>
-    <div v-for="source in sources" :key="source">
-      <a :href="BASE_URL + 'Documenten/' + source.link" target="_blank">{{source.source}}</a>
+    <div v-for="source in sources" :key="source.link">
+      <a :href="`${BASE_URL}Documenten/${source.link}.pdf`" target="_blank">{{source.source}}</a>
     </div>
 
     <h2>Plaatjes</h2>
-    <div v-for="image in images" :key="image">
-      <a :href="BASE_URL + image.link" target="_blank">{{image.image}}</a>
+    <div v-for="image in images" :key="image.link">
+      <a :href="`${BASE_URL}Afbeeldingen/${image.link}`" target="_blank">{{image.image}}</a>
 
     </div>
   </div>
@@ -19,16 +19,6 @@ import { mapGetters } from 'vuex'
 import _ from 'lodash'
 
 const BASE_URL = 'https://131f4363709c46b89a6ba5bc764b38b9.objectstore.eu/hior/'
-
-function sourceLink (source) {
-  const linkData = source.match(/^(.*) \((\d+)\)$/)
-  try {
-    const [, title, year] = linkData
-    return `${year} ${title}.pdf`
-  } catch (e) {
-    return source
-  }
-}
 
 export default {
   name: 'Errors',
@@ -55,10 +45,11 @@ export default {
         this.sources = _.uniq(this.attributes
           .filter(attr => attr.name === 'SourceLink')
           .map(attr => attr.value))
+          .filter(source => !source.includes('(voormalig)'))
           .sort()
           .map(source => ({
             source,
-            link: sourceLink(source)
+            link: source
           }))
 
         this.images = _.uniq(this.attributes
