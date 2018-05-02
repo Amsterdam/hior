@@ -266,6 +266,8 @@ export default {
       abortFilter()
       this.textFilter = ''
       this.propertyTypes.forEach(p => { this.selected[p] = '' })
+      // Default stadsdeel is Heel Amsterdam
+      this.selected['Area'] = this.propertyTypeValues('Area')[0].value
       this.filterItems()
     },
 
