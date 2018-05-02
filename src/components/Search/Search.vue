@@ -81,9 +81,9 @@
           <div v-html="filteredText(item.htmlDescription, textFilter)"></div>
 
           <!--Images-->
-          <div class="text-center mt-2">
+          <div class="mt-2">
             <a v-for="img in item.Image" :key="img" :href="`${BASE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
-              <img class="item-image ml-3" :src="`${BASE_URL}Afbeeldingen/${img}`"/>
+              <img class="item-image mr-3" :src="`${BASE_URL}Afbeeldingen/${img}`"/>
             </a>
           </div>
 
@@ -104,14 +104,16 @@
                 </td>
               </tr>
               <tr v-if="item.Link">
-                <th scope="row" style="vertical-align:top">Zie ook</th>
-                <td>
-                  <div v-for="attr in item.Link" :key="attr" class="ml-2">
+                <th scope="row" colspan="2">Zie ook:</th>
+              </tr>
+              <tr v-if="item.Link">
+                <th colspan="2">
+                  <div v-for="attr in item.Link" :key="attr">
                     <a :href="`${BASE_URL}Documenten/${attr}`" target="_blank" :title="attr">
                       {{attr}}
                     </a>
                   </div>
-                </td>
+                </th>
               </tr>
               </tbody>
             </table>
