@@ -104,11 +104,10 @@
                 </td>
               </tr>
               <tr v-if="item.Link">
-                <th scope="row">Zie ook</th>
+                <th scope="row" style="vertical-align:top">Zie ook</th>
                 <td>
-                  <div class="ml-2">
-                    <a v-for="attr in item.Link" :key="attr"
-                       :href="`${BASE_URL}Documenten/${attr}`" target="_blank" :title="attr">
+                  <div v-for="attr in item.Link" :key="attr" class="ml-2">
+                    <a :href="`${BASE_URL}Documenten/${attr}`" target="_blank" :title="attr">
                       {{attr}}
                     </a>
                   </div>
