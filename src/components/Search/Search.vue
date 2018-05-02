@@ -321,7 +321,10 @@ export default {
 
           const toHtml = text => text.replace(/\n/g, '<br>') // simply translate line breaks
           item.htmlText = toHtml(item.text)
-          item.htmlDescription = toHtml(item.description)
+
+          // e.g.: https://maps.amsterdam.nl/plushoofdnetten
+          item.htmlDescription = toHtml(item.description
+            .replace(/(http[s]?:\/\/[^\s]+)/gi, '<a href="$1" target="_blank">$1</a>'))
           item.sortKey = itemOrder(item)
         })
         this.properties.forEach(prop => { prop.sortKey = propertyOrder(prop) })
