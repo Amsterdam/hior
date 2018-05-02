@@ -4,7 +4,7 @@
       <div class="row">
         <!--Show property filters-->
         <div v-for="propType in propertyTypes" :key="propType" class="col-6 mb-1">
-          <label :for="propType">
+          <label :for="propType" class="mb-1">
             {{propertyTypeName(propType)}}
           </label>
           <select class="form-control" :id="propType"
@@ -331,5 +331,20 @@ export default {
 }
 .item-image {
   max-width: 250px;
+}
+/*Firefox hacks for select*/
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(dropdown.png) right / 20px no-repeat #fff;
+  padding-right: 20px;
+}
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+option:not(:checked) {
+  color: black; /* prevent <option>s from becoming transparent as well */
 }
 </style>
