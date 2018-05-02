@@ -6,6 +6,11 @@
       <a :href="`${BASE_URL}Documenten/${source.link}.pdf`" target="_blank">{{source.source}}</a>
     </div>
 
+    <h2>Links</h2>
+    <div v-for="source in links" :key="source.link">
+      <a :href="`${BASE_URL}Documenten/${source.link}`" target="_blank">{{source.link}}</a>
+    </div>
+
     <h2>Plaatjes</h2>
     <div v-for="image in images" :key="image.link">
       <a :href="`${BASE_URL}Afbeeldingen/${image.link}`" target="_blank">{{image.image}}</a>
@@ -36,6 +41,7 @@ export default {
     return {
       sources: [],
       images: [],
+      links: [],
       BASE_URL
     }
   },
@@ -50,6 +56,15 @@ export default {
           .map(source => ({
             source,
             link: source
+          }))
+
+        this.links = _.uniq(this.attributes
+          .filter(attr => attr.name === 'Link')
+          .map(attr => attr.value))
+          .sort()
+          .map(value => ({
+            value,
+            link: value
           }))
 
         this.images = _.uniq(this.attributes

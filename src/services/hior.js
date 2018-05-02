@@ -1,6 +1,7 @@
 import { readPaginatedData } from './datareader'
+import { getAPIBaseUrl } from './environment'
 
-const API = 'https://api.data.amsterdam.nl/vsd'
+const API = getAPIBaseUrl() + '/vsd'
 
 /**
  * Get the HIOR items; text, description
