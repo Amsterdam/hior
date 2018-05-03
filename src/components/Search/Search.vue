@@ -135,41 +135,7 @@ import _ from 'lodash'
 import { filteredText, toHTML } from '@/services/util'
 import { OBJECTSTORE_URL } from '@/services/objectstore'
 import Card from '../Layout/Card'
-
-const PROPERTY_TYPE_NAMES = {
-  'Area': 'Stadsdeel',
-  'Type': 'Type',
-  'Source': 'Bron',
-  'Level': 'Niveau',
-  'Theme': 'Thema'
-}
-
-const LEVEL_ORDER = {
-  'Strategisch Niveau': 1,
-  'Tactisch Niveau': 2,
-  'Operationeel Niveau': 3,
-  'Proces': 4
-}
-
-const TYPE_ORDER = {
-  'Randvoorwaarde': 1,
-  'Uitgangspunt': 2,
-  'Ambitie': 3,
-  'Advies': 4
-}
-
-function itemOrder (item) {
-  return `${item.Theme[0]}.${LEVEL_ORDER[item.Level[0]]}.${TYPE_ORDER[item.Type[0]]}`
-}
-
-function propertyOrder (property) {
-  const X = {
-    'Level': () => LEVEL_ORDER[property.value],
-    'Type': () => TYPE_ORDER[property.value],
-    'Area': () => (property.value === 'Heel Amsterdam' ? 'A' : 'B') + property.value
-  }
-  return X[property.name] ? X[property.name]() : property.value
-}
+import { propertyTypeName, itemOrder, propertyOrder, linkItems, filterItems } from '@/services/hior'
 
 /**
  * autofilter timeout
@@ -229,7 +195,7 @@ export default {
      * @returns {*}
      */
     propertyTypeName (propertyType) {
-      return PROPERTY_TYPE_NAMES[propertyType]
+      return propertyTypeName([propertyType])
     },
 
     /**
@@ -247,7 +213,12 @@ export default {
       return _.orderBy(values, ['sortKey'], ['asc'])
     },
 
+    /**
+     * Provides for a subtitle, to show below the item text
+     */
     subTitle (item) {
+      // Themes, levels and types are each joined by a ',' and then joined with a '-'
+      // e.g. Theme: [a, b], Level: [c] and Type: [d, f] => "a, b - c - d, f"
       return ['Theme', 'Level', 'Type'].map(propType => item[propType].join(', ')).join(' - ')
     },
 
@@ -267,8 +238,7 @@ export default {
       abortFilter()
       this.textFilter = ''
       this.propertyTypes.forEach(p => { this.selected[p] = '' })
-      // Default stadsdeel is Heel Amsterdam
-      this.selected['Area'] = this.propertyTypeValues('Area')[0].value
+      this.selected['Area'] = this.propertyTypeValues('Area')[0].value // Default stadsdeel is Heel Amsterdam
       this.filterItems()
     },
 
@@ -278,21 +248,8 @@ export default {
      * searching for non proper regex's, e.g. a[
      */
     filterItems () {
-      let reTextFilter
-      try {
-        // Not every text is a valid re, e.g. "a["
-        reTextFilter = new RegExp(this.textFilter, 'i')
-      } catch (e) {
-        return // Wait for better times...
-      }
-      this.matchedItems = this.items.filter(item =>
-        // If a text filter is specified it must match either text of description
-        (!this.textFilter || (reTextFilter.test(item.text) || reTextFilter.test(item.description))) &&
-        this.propertyTypes.reduce((totalResult, prop) =>
-          // if a filter on a property is specified it must match the corresponding item property
-          totalResult && (!this.selected[prop] || item[prop].includes(this.selected[prop])),
-        true))
-      this.matchedItems = _.orderBy(this.matchedItems, ['sortKey'], ['asc'])
+      const matchedItems = filterItems(this.items, this.selected, this.textFilter)
+      this.matchedItems = _.orderBy(matchedItems, ['sortKey'], ['asc'])
     },
 
     /**
@@ -300,10 +257,17 @@ export default {
      */
     filteredText,
 
+    /**
+     * Specify the sort order of the items
+     */
     orderItemsBy (property) {
       this.orderBy = property
     },
 
+    /**
+     * Get all items that have a property with the requested value
+     * Note that properties are stored in the item as arrays of values
+     */
     itemValues (items, property, value) {
       return items.filter(item => item[property.name].includes(value))
     },
@@ -313,20 +277,17 @@ export default {
      */
     init () {
       if (this.items && this.properties && this.attributes) {
+        // Provide for filter functionality for each property
         this.propertyTypes = _.uniq(this.properties.map(p => p.name))
+        // Sort properties on their order (eg Randvoorwaarde comes before Advies
+        this.properties.forEach(prop => { prop.sortKey = propertyOrder(prop) })
+        // Link the items with the corresponding properties and attributes
+        linkItems(this.items, this.properties, this.attributes)
         this.items.forEach(item => {
-          ['properties', 'attributes'].forEach(coll => {
-            this[coll].filter(el => el.item_id === item.id)
-              .forEach(el => { item[el.name] = [] })
-            this[coll].filter(el => el.item_id === item.id)
-              .forEach(el => { item[el.name].push(el.value) })
-          })
-
           item.htmlText = toHTML(item.text)
           item.htmlDescription = toHTML(item.description)
           item.sortKey = itemOrder(item)
         })
-        this.properties.forEach(prop => { prop.sortKey = propertyOrder(prop) })
         this.clear()
       }
     }
