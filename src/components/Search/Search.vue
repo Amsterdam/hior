@@ -132,8 +132,8 @@
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 
+import { filteredText, toHTML } from '../../services/util'
 import Card from '../Layout/Card'
-import { filteredText } from '../../services/util'
 
 const PROPERTY_TYPE_NAMES = {
   'Area': 'Stadsdeel',
@@ -323,11 +323,10 @@ export default {
               .forEach(el => { item[el.name].push(el.value) })
           })
 
-          const toHtml = text => text.replace(/\n/g, '<br>') // simply translate line breaks
-          item.htmlText = toHtml(item.text)
+          item.htmlText = toHTML(item.text)
 
           // e.g.: https://maps.amsterdam.nl/plushoofdnetten
-          item.htmlDescription = toHtml(item.description
+          item.htmlDescription = toHTML(item.description
             .replace(/(http[s]?:\/\/[^\s]+)/gi, '<a href="$1" target="_blank">$1</a>'))
           item.sortKey = itemOrder(item)
         })

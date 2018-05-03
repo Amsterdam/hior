@@ -10,6 +10,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { toHTML } from '@/services/util'
 import Card from '../Layout/Card'
 
 export default {
@@ -33,12 +34,14 @@ export default {
     }
   },
   methods: {
+    /**
+     * Extend the FAQ items with the questions and answers in HTML format
+     */
     init () {
-      const toHtml = text => text.replace(/\n/g, '<br>') // simply translate line breaks
       this.items = this.faq.map(item => ({
         ...item,
-        htmlQuestion: toHtml(item.question),
-        htmlAnswer: toHtml(item.answer)
+        htmlQuestion: toHTML(item.question),
+        htmlAnswer: toHTML(item.answer)
       }))
     }
   },
@@ -47,7 +50,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

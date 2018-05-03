@@ -9,3 +9,5 @@ export const filteredText = (text, filterText) => {
   // $& Inserts the matched substring
   return filterText ? text.replace(RegExp(filterText, 'ig'), `<span class="filterText">$&</span>`) : text
 }
+
+export const toHTML = text => text.replace(/\n/g, '<br>') // simply translate line breaks
