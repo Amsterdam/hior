@@ -82,8 +82,8 @@
 
           <!--Images-->
           <div class="mt-2">
-            <a v-for="img in item.Image" :key="img" :href="`${BASE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
-              <img class="item-image mr-3" :src="`${BASE_URL}Afbeeldingen/${img}`"/>
+            <a v-for="img in item.Image" :key="img" :href="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
+              <img class="item-image mr-3" :src="`${OBJECTSTORE_URL}Afbeeldingen/${img}`"/>
             </a>
           </div>
 
@@ -96,7 +96,7 @@
                 <td>
                   <div class="ml-2">
                     <a v-if="propType === 'Source' && !item.SourceLink[0].includes('(voormalig)')"
-                       :href="`${BASE_URL}Documenten/${item.SourceLink[0]}.pdf`" target="_blank" :title="item[propType][0]">
+                       :href="`${OBJECTSTORE_URL}Documenten/${item.SourceLink[0]}.pdf`" target="_blank" :title="item[propType][0]">
                       {{item[propType][0]}}
                     </a>
                     <span v-else>{{item[propType].join(', ')}}</span>
@@ -109,7 +109,7 @@
               <tr v-if="item.Link">
                 <th colspan="2">
                   <div v-for="attr in item.Link" :key="attr">
-                    <a :href="`${BASE_URL}Documenten/${attr}`" target="_blank" :title="attr">
+                    <a :href="`${OBJECTSTORE_URL}Documenten/${attr}`" target="_blank" :title="attr">
                       {{attr}}
                     </a>
                   </div>
@@ -132,7 +132,8 @@
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 
-import { filteredText, toHTML } from '../../services/util'
+import { filteredText, toHTML } from '@/services/util'
+import { OBJECTSTORE_URL } from '@/services/objectstore'
 import Card from '../Layout/Card'
 
 const PROPERTY_TYPE_NAMES = {
@@ -170,8 +171,6 @@ function propertyOrder (property) {
   return X[property.name] ? X[property.name]() : property.value
 }
 
-const BASE_URL = 'https://131f4363709c46b89a6ba5bc764b38b9.objectstore.eu/hior/'
-
 /**
  * autofilter timeout
  */
@@ -205,7 +204,7 @@ export default {
       matchedItems: [],
       textFilter: '',
       orderBy: 'Theme',
-      BASE_URL
+      OBJECTSTORE_URL
     }
   },
   watch: {

@@ -3,27 +3,32 @@
 
     <h2>Bronnen</h2>
     <div v-for="source in sources" :key="source.link">
-      <a :href="`${BASE_URL}Documenten/${source.link}.pdf`" target="_blank">{{source.source}}</a>
+      <a :href="`${OBJECTSTORE_URL}Documenten/${source.link}.pdf`" target="_blank">{{source.source}}</a>
     </div>
 
     <h2>Links</h2>
     <div v-for="source in links" :key="source.link">
-      <a :href="`${BASE_URL}Documenten/${source.link}`" target="_blank">{{source.link}}</a>
+      <a :href="`${OBJECTSTORE_URL}Documenten/${source.link}`" target="_blank">{{source.link}}</a>
     </div>
 
     <h2>Plaatjes</h2>
     <div v-for="image in images" :key="image.link">
-      <a :href="`${BASE_URL}Afbeeldingen/${image.link}`" target="_blank">{{image.image}}</a>
+      <a :href="`${OBJECTSTORE_URL}Afbeeldingen/${image.link}`" target="_blank">{{image.image}}</a>
 
     </div>
   </div>
 </template>
 
 <script>
+/**
+ * This is a simple component used for development only
+ * No tests or comments are included for this component
+ * The component is used to display or external references that are being used on one page
+ * A broken link checker can be used to verify that all links are valid
+ */
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
-
-const BASE_URL = 'https://131f4363709c46b89a6ba5bc764b38b9.objectstore.eu/hior/'
+import { OBJECTSTORE_URL } from '@/services/objectstore'
 
 export default {
   name: 'Errors',
@@ -42,7 +47,7 @@ export default {
       sources: [],
       images: [],
       links: [],
-      BASE_URL
+      OBJECTSTORE_URL
     }
   },
   methods: {
