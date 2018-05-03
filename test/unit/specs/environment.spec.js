@@ -1,7 +1,8 @@
 import { getAPIBaseUrl, API } from '@/services/environment'
 
 describe('environment', () => {
-  function getAPIBase(url) {
+  function getAPIBase (url) {
+    /* global jsdom */
     jsdom.reconfigure({
       url: `http://${url}`
     })
