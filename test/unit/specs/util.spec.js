@@ -17,4 +17,11 @@ describe('util', () => {
     expect(toHTML('\n')).toEqual('<br>')
     expect(toHTML('abc\ndef\n\n')).toEqual('abc<br>def<br><br>')
   })
+
+  it('converts plain text to HTML, including hyperlinks', () => {
+    expect(toHTML('http://a')).toEqual('<a href="http://a" target="_blank">http://a</a>')
+    expect(toHTML('https://a.b.c')).toEqual('<a href="https://a.b.c" target="_blank">https://a.b.c</a>')
+    const nonHrefs = ['http:/a', 'http//a', 'https:/a', 'http://', 'https://']
+    nonHrefs.forEach(s => expect(toHTML(s)).toEqual(s))
+  })
 })

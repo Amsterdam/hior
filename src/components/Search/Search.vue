@@ -323,10 +323,7 @@ export default {
           })
 
           item.htmlText = toHTML(item.text)
-
-          // e.g.: https://maps.amsterdam.nl/plushoofdnetten
-          item.htmlDescription = toHTML(item.description
-            .replace(/(http[s]?:\/\/[^\s]+)/gi, '<a href="$1" target="_blank">$1</a>'))
+          item.htmlDescription = toHTML(item.description)
           item.sortKey = itemOrder(item)
         })
         this.properties.forEach(prop => { prop.sortKey = propertyOrder(prop) })

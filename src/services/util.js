@@ -10,4 +10,6 @@ export const filteredText = (text, filterText) => {
   return filterText ? text.replace(RegExp(filterText, 'ig'), `<span class="filterText">$&</span>`) : text
 }
 
-export const toHTML = text => text.replace(/\n/g, '<br>') // simply translate line breaks
+export const toHTML = text => text
+  .replace(/\n/g, '<br>') // simply translate line breaks
+  .replace(/(http[s]?:\/\/[^\s]+)/gi, '<a href="$1" target="_blank">$1</a>') // Convert hyperlinks
