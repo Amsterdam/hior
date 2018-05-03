@@ -15,6 +15,7 @@ export default new Router({
       redirect: '/home'
     },
     {
+      // Non-public path, used for check for broken links
       path: '/sources',
       name: 'Sources',
       component: Sources
