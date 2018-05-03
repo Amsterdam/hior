@@ -11,15 +11,16 @@
                   v-model="selected[propType]"
                   @change="propertyValueSelected(propType, selected[propType])">
             <option value="">Kies een {{propertyTypeName(propType)}}</option>
-            <option :value="prop.value"  v-for="prop in propertyTypeValues(propType)" :key="prop.value" v-if="prop.count">
-              {{prop.value}} ({{prop.count}})
+            <option :value="prop.value"  v-for="prop in propertyTypeValues(propType)" :key="prop.value"
+                    v-if="prop.possibleCount">
+              {{prop.value}} ({{prop.possibleCount}})
             </option>
           </select>
         </div>
 
         <!--Show text filter-->
         <div class="col-6 mb-1">
-          <label for="textFilter">
+          <label for="textFilter" class="mb-1">
           Filter op tekst
         </label>
           <input v-model="textFilter"
@@ -65,7 +66,10 @@
           <div class="text-right">
             <div class="float-left">
               <div class="font-weight-bold mt-1">
-                {{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})
+                <div>
+                  <span><img :src="`../../../static/icons/${prop.value}.png`" class="prop-image"></span>
+                  <span class="prop-text">{{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})</span>
+                </div>
               </div>
             </div>
             <a class="btn btn-sm btn-primary top-link" href="#top">&#x25B2;</a>
@@ -206,10 +210,20 @@ export default {
      */
     propertyTypeValues (propertyType) {
       let values = _.uniqBy(this.properties.filter(p => p.name === propertyType), 'value')
-        .map(p => ({
-          ...p,
-          count: this.matchedItems.filter(i => i[p.name].includes(p.value)).length
-        }))
+        .map(property => {
+          // For each property value compute the #items with the specific value
+          const count = this.matchedItems.filter(i => i[property.name].includes(property.value)).length
+          const possibleCount = this.selected[propertyType]
+            // If a selection is already made on this propertyType, determine the count as if nothing has been selected
+            ? filterItems(this.items.filter(i => i[property.name].includes(property.value)),
+              { ...this.selected, [propertyType]: undefined }, this.textFilter).length
+            : count
+          return {
+            ...property,
+            count,
+            possibleCount
+          }
+        })
       return _.orderBy(values, ['sortKey'], ['asc'])
     },
 
@@ -304,6 +318,15 @@ export default {
 }
 .item-image {
   max-width: 250px;
+}
+.prop-image {
+  height: 55px;
+  margin-top: -16px;
+  margin-left: -10px;
+  margin-right: 20px;
+}
+.prop-text {
+  vertical-align: top;
 }
 /*Firefox hacks for select*/
 select {
