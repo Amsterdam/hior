@@ -15,6 +15,10 @@ export default new Router({
       redirect: '/home'
     },
     {
+      path: '*',
+      redirect: '/search'
+    },
+    {
       // Non-public path, used for check for broken links
       path: '/sources',
       name: 'Sources',

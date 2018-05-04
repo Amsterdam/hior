@@ -67,7 +67,7 @@
             <div class="float-left">
               <div class="font-weight-bold mt-1">
                 <div>
-                  <span><img :src="`../../../static/icons/${prop.value}.png`" class="prop-image"></span>
+                  <span><img v-if="prop.name === 'Theme'" :src="`../../../static/icons/${prop.value.replace(/^\d+\.\s/, '')}.png`" class="prop-image"></span>
                   <span class="prop-text">{{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})</span>
                 </div>
               </div>
@@ -77,8 +77,8 @@
         </div>
 
         <!--Show each matched result in a Card, default collapsed only showing the item text-->
-        <card v-for="item in itemValues(matchedItems, prop, prop.value)"
-              :title="filteredText(item.htmlText, textFilter)" :subTitle="subTitle(item)" :key="item.text"
+        <card v-for="(item, i) in itemValues(matchedItems, prop, prop.value)" :key="i"
+              :title="filteredText(item.htmlText, textFilter)" :subTitle="subTitle(item)"
               :collapse="true">
 
           <!--The item description-->
@@ -86,8 +86,9 @@
 
           <!--Images-->
           <div class="mt-2">
-            <a v-for="img in item.Image" :key="img" :href="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
-              <img class="item-image mr-3" :src="`${OBJECTSTORE_URL}Afbeeldingen/${img}`"/>
+            <a v-for="img in item.Image" :key="img"
+               :href="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
+              <img class="item-image mr-3" :src="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" :alt="img">
             </a>
           </div>
 

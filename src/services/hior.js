@@ -83,7 +83,8 @@ export function propertyOrder (property) {
   const getOrder = {
     'Level': () => LEVEL_ORDER[property.value] || 9,
     'Type': () => TYPE_ORDER[property.value] || 9,
-    'Area': () => (property.value === 'Heel Amsterdam' ? '0' : '1') + property.value
+    'Area': () => (property.value === 'Heel Amsterdam' ? '0' : '1') + property.value,
+    'Theme': () => Number(property.value.match(/^(\d+)/)[0])
   }
 
   return getOrder[property.name] ? getOrder[property.name]() : property.value
