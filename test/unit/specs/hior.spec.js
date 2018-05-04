@@ -72,16 +72,19 @@ describe('hior', () => {
 
   it('can rank items', () => {
     const items = [
-      {Theme: ['A'], Level: ['Proces'], Type: ['Ambitie']},
-      {Theme: ['B'], Level: ['Strategisch Niveau'], Type: ['Randvoorwaarde']},
-      {Theme: ['A'], Level: ['other'], Type: ['other']}
+      {id: 1, Theme: ['1. A'], Level: ['Proces'], Type: ['Ambitie']},
+      {id: 2, Theme: ['2. B'], Level: ['Strategisch Niveau'], Type: ['Randvoorwaarde']},
+      {id: 33, Theme: ['1. A'], Level: ['other'], Type: ['other']},
+      {id: 34, Theme: ['1. A'], Level: ['other'], Type: ['other']}
     ]
-    expect(itemOrder(items[0])).toEqual('A.4.3')
-    expect(itemOrder(items[1])).toEqual('B.1.1')
-    expect(itemOrder(items[2])).toEqual('A.9.9')
+    expect(itemOrder(items[0])).toEqual('01.4.3.000001')
+    expect(itemOrder(items[1])).toEqual('02.1.1.000002')
+    expect(itemOrder(items[2])).toEqual('01.9.9.000033')
+    expect(itemOrder(items[3])).toEqual('01.9.9.000034')
     expect(itemOrder(items[0]) < itemOrder(items[1])).toEqual(true)
     expect(itemOrder(items[0]) < itemOrder(items[2])).toEqual(true)
     expect(itemOrder(items[1]) > itemOrder(items[2])).toEqual(true)
+    expect(itemOrder(items[2]) < itemOrder(items[3])).toEqual(true)
   })
 
   it('can filter items on properties and free text', () => {

@@ -65,6 +65,8 @@ export function propertyTypeName (propertyType) {
   }[propertyType]
 }
 
+const numToString = (n, length) => n.toString().padStart(length, '0')
+
 export function propertyOrder (property) {
   const LEVEL_ORDER = {
     'Strategisch Niveau': 1,
@@ -84,7 +86,7 @@ export function propertyOrder (property) {
     'Level': () => LEVEL_ORDER[property.value] || 9,
     'Type': () => TYPE_ORDER[property.value] || 9,
     'Area': () => (property.value === 'Heel Amsterdam' ? '0' : '1') + property.value,
-    'Theme': () => Number(property.value.match(/^(\d+)/)[0])
+    'Theme': () => numToString(Number(property.value.match(/^(\d+)/)[0]), 2)
   }
 
   return getOrder[property.name] ? getOrder[property.name]() : property.value
@@ -92,7 +94,7 @@ export function propertyOrder (property) {
 
 export function itemOrder (item) {
   const orderOf = (name) => propertyOrder({name, value: item[name][0]})
-  return `${item.Theme[0]}.${orderOf('Level')}.${orderOf('Type')}`
+  return `${orderOf('Theme')}.${orderOf('Level')}.${orderOf('Type')}.${numToString(item.id, 6)}`
 }
 
 export function filterItems (items, selectedProperties, textFilter) {
