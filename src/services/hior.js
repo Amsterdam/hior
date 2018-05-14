@@ -55,6 +55,11 @@ export function linkItems (items, properties, attributes) {
   return items
 }
 
+/**
+ * Provide for the local (dutch) name of the propertyType, e.g. "Source" => "Bron"
+ * @param propertyType
+ * @returns {*}
+ */
 export function propertyTypeName (propertyType) {
   return {
     'Area': 'Stadsdeel',
@@ -65,8 +70,24 @@ export function propertyTypeName (propertyType) {
   }[propertyType]
 }
 
+/**
+ * Utility method to convert a number to a leftpadded string of length n
+ * @param n
+ * @param length
+ * @returns {string}
+ */
 const numToString = (n, length) => n.toString().padStart(length, '0')
 
+/**
+ * Properties can be ordered.
+ * Property levels are ordered from 1 to 4, as are property types
+ * Property themes are ordered on their own number, e.g "1. xyz" => "01"
+ * Property areas are ordered on 1. heel Amsterdam and the other areas alphabetically
+ * When ordering properties arrays, the minimum property of the values in the array are returned,
+ * e.g. level = ['Proces', 'Tactisch Niveau'] will return 2
+ * @param property
+ * @returns {*}
+ */
 export function propertyOrder (property) {
   const LEVEL_ORDER = {
     'Strategisch Niveau': 1,
@@ -82,21 +103,48 @@ export function propertyOrder (property) {
     'Advies': 4
   }
 
-  const getOrder = {
-    'Level': () => LEVEL_ORDER[property.value] || 9,
-    'Type': () => TYPE_ORDER[property.value] || 9,
-    'Area': () => (property.value === 'Heel Amsterdam' ? '0' : '1') + property.value,
-    'Theme': () => numToString(Number(property.value.match(/^(\d+)/)[0]), 2)
+  /**
+   * Returns the order of the nth value of the property
+   * @param valueIndex
+   * @returns {*}
+   */
+  const getOrder = value => {
+    const ORDER = {
+      'Level': () => LEVEL_ORDER[value] || 9,
+      'Type': () => TYPE_ORDER[value] || 9,
+      'Area': () => (value === 'Heel Amsterdam' ? '0' : '1') + value,
+      'Theme': () => numToString(Number(value.match(/^(\d+)/)[0]), 2)
+    }
+    return ORDER[property.name] ? ORDER[property.name]() : value
   }
 
-  return getOrder[property.name] ? getOrder[property.name]() : property.value
+  /**
+   * Returns the minimum order of the values for the given property
+   */
+  return property.values.reduce((minOrder, value) => {
+    const propertyOrder = getOrder(value)
+    return (minOrder === null || propertyOrder < minOrder) ? propertyOrder : minOrder
+  }, null)
 }
 
+/**
+ * Items are ordered on 1. Theme, 2. Level, 3. Type, 4. ordering in source
+ * @param item
+ * @returns {string}
+ */
 export function itemOrder (item) {
-  const orderOf = (name) => propertyOrder({name, value: item[name][0]})
+  const orderOf = (name) => propertyOrder({name, values: item[name]})
   return `${orderOf('Theme')}.${orderOf('Level')}.${orderOf('Type')}.${numToString(item.id, 6)}`
 }
 
+/**
+ * Filter items on a number of selected properties (e.g. Type = 'Uitgangspunt') and an optional textfiler (e.g. 'Fiets')
+ * The returning set of items contains all items that have the selected properties and that contain text that matches the textfilter
+ * @param items
+ * @param selectedProperties
+ * @param textFilter
+ * @returns {*}
+ */
 export function filterItems (items, selectedProperties, textFilter) {
   let reTextFilter
   try {
