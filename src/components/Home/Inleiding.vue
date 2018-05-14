@@ -1,27 +1,13 @@
 <template>
     <div>
       <p>
-        Dit is de eerste testversie van het "HIOR Amsterdam". Het HIOR is een integrale verzameling van het
-        vigerend
-        beleid voor de inrichting van de openbare ruimte in Amsterdam. Het HIOR helpt opdrachtgevers,
-        projectleiders, ontwerpers, adviseurs en beheerders om invuilling te geven aan het Amsterdamse beleid.
+        Dit is de eerste testversie van het Handboek Inrichting Openbare Ruimte (HIOR) Amsterdam.
+        In dit digitale handboek vind je de hoofdlijnen van het beleid voor de inrichting van de Amsterdamse openbare ruimte.
+        Het beleid is makkelijk doorzoekbaar op thema (bijvoorbeeld 'fiets', 'groen' en 'straatmeubilair') of per beleidsproduct (bijvoorbeeld de 'Visie Openbare Ruimte' of de 'Nota Parkeernormen').
       </p>
-      <div>
-        In deze applicatie kun je beleid terugvinden:
-        <ul>
-          <li>
-            Per thema, bijvoorbeeld 'fiets', 'voetganger', 'groen', 'water & oevers' en 'straatmeubilair'
-          </li>
-          <li>
-            Per beleidsproduct, bijvoorbeeld alle hoofdlijnen van de 'visie openbare ruimte' of de 'nota
-            parkeernormen'
-          </li>
-        </ul>
-      </div>
       <p>
-        Daarnaast zijn aan de beleidsinformatie kenmerken toegevoegd, die hieronder worden toegelicht.
+        Om het beleid te ordenen zijn kenmerken toegevoegd, die hieronder worden toegelicht.
       </p>
-
     </div>
 </template>
 
