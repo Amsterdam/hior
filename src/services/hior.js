@@ -121,7 +121,8 @@ export function propertyOrder (property) {
   /**
    * Returns the minimum order of the values for the given property
    */
-  return property.values.reduce((minOrder, value) => {
+  const values = property.values || [property.value]
+  return values.reduce((minOrder, value) => {
     const propertyOrder = getOrder(value)
     return (minOrder === null || propertyOrder < minOrder) ? propertyOrder : minOrder
   }, null)

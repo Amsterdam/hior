@@ -58,6 +58,8 @@ describe('hior', () => {
   })
 
   it('can rank properties', () => {
+    expect(propertyOrder({name: 'Level', value: 'Strategisch Niveau'})).toEqual(1)
+
     expect(propertyOrder({name: 'Level', values: ['Strategisch Niveau']})).toEqual(1)
     expect(propertyOrder({name: 'Level', values: ['Proces']})).toEqual(4)
     expect(propertyOrder({name: 'Level', values: ['Proces', 'Strategisch Niveau']})).toEqual(1)

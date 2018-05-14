@@ -44,87 +44,19 @@
     <div v-if="matchedItems.length">
       <h2 id="top">Resultaten ({{matchedItems.length}})</h2>
 
-      <div class="text-center">
-        <button type="button" class="btn mr-1" v-for="propType in propertyTypes" :key="propType"
-                @click="orderItemsBy(propType)" :class="{'btn-primary': orderBy === propType}">
-          {{propertyTypeName(propType)}}
-        </button>
-      </div>
-
-      <div class="text-center mt-3">
-        <a v-for="prop in propertyTypeValues(orderBy)" :key="prop.value"
-           v-if="prop.count > 0"
-           :href="`#${prop.value}`"
-           class="badge badge-pill mr-1">{{prop.value}} ({{prop.count}})</a>
-      </div>
+      <search-sort :propertyTypes="propertyTypes" :propertyTypeValues="propertyTypeValues"
+                   :orderBy="orderBy" :orderItemsBy="orderItemsBy">
+      </search-sort>
 
       <div v-for="prop in propertyTypeValues(orderBy)" :key="prop.value" v-if="prop.count > 0"
            :title="`${prop.value} (${prop.count})`" :collapse="true" class="mt-2">
 
         <a :id="prop.value"></a>
-        <div class="alert alert-primary mt-3" role="alert">
-          <div class="text-right">
-            <div class="float-left">
-              <div class="font-weight-bold mt-1">
-                <div>
-                  <span><img v-if="prop.name === 'Theme'" :src="`../../../static/icons/${prop.value.replace(/^\d+\.\s/, '')}.png`" class="prop-image"></span>
-                  <span class="prop-text">{{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})</span>
-                </div>
-              </div>
-            </div>
-            <a class="btn btn-sm btn-primary top-link" href="#top">&#x25B2;</a>
-          </div>
-        </div>
+        <results-header :prop="prop"></results-header>
 
-        <!--Show each matched result in a Card, default collapsed only showing the item text-->
-        <card v-for="(item, i) in itemValues(matchedItems, prop, prop.value)" :key="i"
-              :title="filteredText(item.htmlText, textFilter)" :subTitle="subTitle(item)"
-              :collapse="true">
-
-          <!--The item description-->
-          <div v-html="filteredText(item.htmlDescription, textFilter)"></div>
-
-          <!--Images-->
-          <div class="mt-2">
-            <a v-for="img in item.Image" :key="img"
-               :href="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
-              <img class="item-image mr-3" :src="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" :alt="img">
-            </a>
-          </div>
-
-          <!--The item properties-->
-          <div class="mt-1 font-weight-bold">
-            <table class="">
-              <tbody>
-              <tr v-for="propType in propertyTypes" :key="propType">
-                <th scope="row">{{propertyTypeName(propType)}}</th>
-                <td>
-                  <div class="ml-2">
-                    <a v-if="propType === 'Source' && !item.SourceLink[0].includes('(voormalig)')"
-                       :href="`${OBJECTSTORE_URL}Documenten/${item.SourceLink[0]}.pdf`" target="_blank" :title="item[propType][0]">
-                      {{item[propType][0]}}
-                    </a>
-                    <span v-else>{{item[propType].join(', ')}}</span>
-                  </div>
-                </td>
-              </tr>
-              <tr v-if="item.Link">
-                <th scope="row" colspan="2">Zie ook:</th>
-              </tr>
-              <tr v-if="item.Link">
-                <th colspan="2">
-                  <div v-for="attr in item.Link" :key="attr">
-                    <a :href="`${OBJECTSTORE_URL}Documenten/${attr}`" target="_blank" :title="attr">
-                      {{attr}}
-                    </a>
-                  </div>
-                </th>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </card>
-
+        <search-result v-for="(item, i) in itemValues(matchedItems, prop, prop.value)" :key="i"
+                       :item="item" :textFilter="textFilter" :propertyTypes="propertyTypes">
+        </search-result>
       </div>
     </div>
     <div v-else>
@@ -138,9 +70,11 @@ import { mapGetters } from 'vuex'
 import _ from 'lodash'
 
 import { filteredText, toHTML } from '@/services/util'
-import { OBJECTSTORE_URL } from '@/services/objectstore'
 import Card from '../Layout/Card'
 import { propertyTypeName, itemOrder, propertyOrder, linkItems, filterItems } from '@/services/hior'
+import SearchResult from './SearchResult'
+import ResultsHeader from './ResultsHeader'
+import SearchSort from './SearchSort'
 
 /**
  * autofilter timeout
@@ -166,6 +100,9 @@ export default {
     ])
   },
   components: {
+    SearchSort,
+    ResultsHeader,
+    SearchResult,
     Card
   },
   data () {
@@ -174,8 +111,7 @@ export default {
       selected: {},
       matchedItems: [],
       textFilter: '',
-      orderBy: 'Theme',
-      OBJECTSTORE_URL
+      orderBy: 'Theme'
     }
   },
   watch: {
@@ -226,15 +162,6 @@ export default {
           }
         })
       return _.orderBy(values, ['sortKey'], ['asc'])
-    },
-
-    /**
-     * Provides for a subtitle, to show below the item text
-     */
-    subTitle (item) {
-      // Themes, levels and types are each joined by a ',' and then joined with a '-'
-      // e.g. Theme: [a, b], Level: [c] and Type: [d, f] => "a, b - c - d, f"
-      return ['Theme', 'Level', 'Type'].map(propType => item[propType].join(', ')).join(' - ')
     },
 
     /**
@@ -314,21 +241,6 @@ export default {
 </script>
 
 <style scoped>
-.top-link {
-  text-decoration: none;
-}
-.item-image {
-  max-width: 250px;
-}
-.prop-image {
-  height: 55px;
-  margin-top: -16px;
-  margin-left: -10px;
-  margin-right: 20px;
-}
-.prop-text {
-  vertical-align: top;
-}
 /*Firefox hacks for select*/
 select {
   -webkit-appearance: none;
