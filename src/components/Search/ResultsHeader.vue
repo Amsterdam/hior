@@ -1,15 +1,12 @@
 <template>
-  <div class="alert alert-primary mt-3" role="alert">
-    <div class="text-right">
-      <div class="float-left">
-        <div class="font-weight-bold mt-1">
-          <div>
-            <span><img v-if="prop.name === 'Theme'" :src="`../../../static/icons/${prop.value.replace(/^\d+\.\s/, '')}.png`" class="prop-image"></span>
-            <span class="prop-text">{{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})</span>
-          </div>
-        </div>
+  <div class="alert alert-primary mt-3 pb-0" role="alert">
+    <div class="font-weight-bold mt-1">
+      <div :class="{'mb-3': prop.name !== 'Theme'}">
+        <span>
+          <img v-if="prop.name === 'Theme'" :src="`../../../static/icons/${prop.value.replace(/^\d+\.\s/, '')}.png`" class="prop-image">
+        </span>
+        <span class="prop-text">{{propertyTypeName(prop.name)}}: {{prop.value}} ({{prop.count}})</span>
       </div>
-      <a class="btn btn-sm btn-primary top-link" href="#top">&#x25B2;</a>
     </div>
   </div>
 </template>
