@@ -84,6 +84,6 @@ export default {
 .top-button {
   position: fixed;
   top: 9px;
-  right: 15px;
+  right: 8px;
 }
 </style>
