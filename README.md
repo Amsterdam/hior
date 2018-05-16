@@ -25,6 +25,8 @@ In [https://github.com/Amsterdam/various_small_datasets/tree/master/src/hior/imp
     node >= 6.0
     npm >= 3.0
     
+    Access to https://acc.api.data.amsterdam.nl (underlying API)
+    
 ### for deployment
 
     docker
