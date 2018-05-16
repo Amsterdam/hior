@@ -7,6 +7,7 @@ import { mapActions } from 'vuex'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import vSelect from 'vue-select'
 
 import App from './App'
 import router from './router'
@@ -15,6 +16,8 @@ import { getAttributes, getItems, getProperties, getFAQ } from './services/hior'
 
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
+
+Vue.component('v-select', vSelect)
 
 /* eslint-disable no-new */
 let vueApp = new Vue({

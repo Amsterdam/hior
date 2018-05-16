@@ -154,13 +154,15 @@ export function filterItems (items, selectedProperties, textFilter) {
   } catch (e) {
     return items // Wait for better times...
   }
-  const properties = Object.keys(selectedProperties).filter(key => selectedProperties[key])
+  const properties = Object.keys(selectedProperties).filter(key => (selectedProperties[key] || []).length)
+  const values = properties.reduce((o, p) => ({...o, [p]: selectedProperties[p].map(p => p.value)}), {})
   const matchedItems = items.filter(item =>
     // If a text filter is specified it must match either text of description
     (!textFilter || (reTextFilter.test(item.text) || reTextFilter.test(item.description))) &&
     properties.reduce((totalResult, prop) =>
       // if a filter on a property is specified it must match the corresponding item property
-      totalResult && ((item[prop] || []).includes(selectedProperties[prop])),
+      totalResult && _.intersection((item[prop] || []), values[prop]).length,
+      // totalResult && ((item[prop] || []).includes(selectedProperties[prop][0])),
     true))
   return matchedItems
 }

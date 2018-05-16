@@ -7,15 +7,16 @@
           <label :for="propType" class="mb-1">
             {{propertyTypeName(propType)}}
           </label>
-          <select class="form-control" :id="propType"
-                  v-model="selected[propType]"
-                  @change="propertyValueSelected(propType, selected[propType])">
-            <option value="">Kies een {{propertyTypeName(propType)}}</option>
-            <option :value="prop.value"  v-for="prop in propertyTypeValues(propType)" :key="prop.value"
-                    v-if="prop.possibleCount">
-              {{prop.value}} ({{prop.possibleCount}})
-            </option>
-          </select>
+          <v-select multiple :id="propType"
+                    v-model="selected[propType]"
+                    :placeholder="`Kies een ${propertyTypeName(propType)}`"
+                    label="value"
+                    @input="propertyValueSelected(propType, selected[propType])"
+                    :options="propertyTypeValues(propType)">
+            <template slot="option" slot-scope="option">
+              {{ `${option.value} (${option.possibleCount})`}}
+            </template>
+          </v-select>
         </div>
 
         <!--Show text filter-->
@@ -135,7 +136,7 @@ export default {
      * OrderBy is changed as a side effect to be set to a visible property type
      */
     unselectedPropertyTypes () {
-      const result = this.propertyTypes.filter(propType => !this.selected[propType])
+      const result = this.propertyTypes.filter(propType => !this.selected[propType].length)
       const orderBy = result.indexOf(this.orderBy) === -1 ? result[0] : this.orderBy
       this.orderBy = orderBy || this.orderBy // If all has been selected; default to last valid orderBy
       return result
@@ -164,7 +165,7 @@ export default {
           const possibleCount = this.selected[propertyType]
             // If a selection is already made on this propertyType, determine the count as if nothing has been selected
             ? filterItems(this.items.filter(i => i[property.name].includes(property.value)),
-              { ...this.selected, [propertyType]: undefined }, this.textFilter).length
+              { ...this.selected, [propertyType]: [] }, this.textFilter).length
             : count
           return {
             ...property,
@@ -172,7 +173,7 @@ export default {
             possibleCount
           }
         })
-      return _.orderBy(values, ['sortKey'], ['asc'])
+      return _.orderBy(values.filter(v => v.possibleCount), ['sortKey'], ['asc'])
     },
 
     /**
@@ -190,8 +191,8 @@ export default {
     clear () {
       abortFilter()
       this.textFilter = ''
-      this.propertyTypes.forEach(p => { this.selected[p] = '' })
-      this.selected['Area'] = this.propertyTypeValues('Area')[0].value // Default stadsdeel is Heel Amsterdam
+      this.propertyTypes.forEach(p => { this.selected[p] = [] })
+      this.selected['Area'] = [this.propertyTypeValues('Area')[0]] // Default stadsdeel is Heel Amsterdam
       this.filterItems()
     },
 
