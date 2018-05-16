@@ -59,15 +59,21 @@ describe('hior', () => {
 
   it('can rank properties', () => {
     expect(propertyOrder({name: 'Level', value: 'Strategisch Niveau'})).toEqual(1)
-    expect(propertyOrder({name: 'Level', value: 'Proces'})).toEqual(4)
-    expect(propertyOrder({name: 'Level', value: 'other'})).toEqual(9)
 
-    expect(propertyOrder({name: 'Type', value: 'Randvoorwaarde'})).toEqual(1)
-    expect(propertyOrder({name: 'Type', value: 'Advies'})).toEqual(4)
-    expect(propertyOrder({name: 'Type', value: 'other'})).toEqual(9)
+    expect(propertyOrder({name: 'Level', values: ['Strategisch Niveau']})).toEqual(1)
+    expect(propertyOrder({name: 'Level', values: ['Proces']})).toEqual(4)
+    expect(propertyOrder({name: 'Level', values: ['Proces', 'Strategisch Niveau']})).toEqual(1)
+    expect(propertyOrder({name: 'Level', values: ['Strategisch Niveau', 'Proces']})).toEqual(1)
+    expect(propertyOrder({name: 'Level', values: ['other']})).toEqual(9)
 
-    expect(propertyOrder({name: 'Area', value: 'Heel Amsterdam'})).toEqual('0Heel Amsterdam')
-    expect(propertyOrder({name: 'Area', value: 'A'})).toEqual('1A')
+    expect(propertyOrder({name: 'Type', values: ['Randvoorwaarde']})).toEqual(1)
+    expect(propertyOrder({name: 'Type', values: ['Advies']})).toEqual(4)
+    expect(propertyOrder({name: 'Type', values: ['other']})).toEqual(9)
+
+    expect(propertyOrder({name: 'Area', values: ['Heel Amsterdam']})).toEqual('0Heel Amsterdam')
+    expect(propertyOrder({name: 'Area', values: ['A']})).toEqual('1A')
+    expect(propertyOrder({name: 'Area', values: ['Heel Amsterdam', 'A']})).toEqual('0Heel Amsterdam')
+    expect(propertyOrder({name: 'Area', values: ['A', 'Heel Amsterdam', 'B']})).toEqual('0Heel Amsterdam')
   })
 
   it('can rank items', () => {
