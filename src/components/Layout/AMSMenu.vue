@@ -2,10 +2,10 @@
   <div>
 
     <div class="sticky-top">
-      <button class="btn btn-primary top-button" @click="scrollToTop()"
+      <button class="btn btn-sm btn-primary top-button" @click="scrollToTop()"
               v-if="canGoToTop"
               title="Terug naar begin van de pagina">
-        Top
+        &#x25B2;
       </button>
     </div>
 
@@ -83,7 +83,7 @@ export default {
 
 .top-button {
   position: fixed;
-  top: 12px;
+  top: 9px;
   right: 15px;
 }
 </style>

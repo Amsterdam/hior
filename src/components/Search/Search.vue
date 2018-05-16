@@ -42,9 +42,9 @@
     </div>
 
     <div v-if="matchedItems.length">
-      <h2 id="top">Resultaten ({{matchedItems.length}})</h2>
+      <h2>Resultaten ({{matchedItems.length}})</h2>
 
-      <search-sort :propertyTypes="propertyTypes" :propertyTypeValues="propertyTypeValues"
+      <search-sort :propertyTypes="unselectedPropertyTypes()" :propertyTypeValues="propertyTypeValues"
                    :orderBy="orderBy" :orderItemsBy="orderItemsBy">
       </search-sort>
 
@@ -130,6 +130,17 @@ export default {
     }
   },
   methods: {
+    /**
+     * Get all property types that have not been selected
+     * OrderBy is changed as a side effect to be set to a visible property type
+     */
+    unselectedPropertyTypes () {
+      const result = this.propertyTypes.filter(propType => !this.selected[propType])
+      const orderBy = result.indexOf(this.orderBy) === -1 ? result[0] : this.orderBy
+      this.orderBy = orderBy || this.orderBy // If all has been selected; default to last valid orderBy
+      return result
+    },
+
     /**
      * Return the name for the propertyType, e.g. 'Stadsdeel' for property type 'Area'
      * @param propertyType
