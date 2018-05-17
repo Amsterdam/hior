@@ -16,7 +16,7 @@ De documenten en plaatjes worden direct van Objectstore gelezen (objectstore ser
 
 Het spreadsheet wordt eerst verwerkt en vertaald.
 Vervolgens wordt de data via een API (vsd/hior_... endpoints) beschikbaar gesteld voor verdere verwerking.
-In [https://github.com/Amsterdam/various_small_datasets/tree/master/src/hior/import] bevindt zich de code daarvoor.
+In <https://github.com/Amsterdam/various_small_datasets/tree/master/src/hior/import> bevindt zich de code daarvoor.
 
 ## Requirements
 
@@ -68,7 +68,7 @@ The app is exposed at localhost:8080
 ## General structure of the app
 
 The app is based upon the template_vue project.
-A customized version of this project is maintained at [https://github.com/Amsterdam/template_vue]
+A customized version of this project is maintained at <https://github.com/Amsterdam/template_vue>
 
 The main logic is concentrated in the Search component and the hior service.
 
