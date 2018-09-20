@@ -71,6 +71,18 @@ export function propertyTypeName (propertyType) {
 }
 
 /**
+ * Provide for the local (dutch) description of the propertyType
+ * Default behaviour is to return the name
+ * @param propertyType
+ * @returns {*}
+ */
+export function propertyTypeDescription (propertyType) {
+  return {
+    'Area': 'Algemeen beleid (Heel Amsterdam) of aanvullend beleid per stadsdeel?'
+  }[propertyType] || propertyTypeName(propertyType)
+}
+
+/**
  * Utility method to convert a number to a leftpadded string of length n
  * @param n
  * @param length
