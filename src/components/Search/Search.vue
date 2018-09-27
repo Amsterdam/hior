@@ -182,7 +182,18 @@ export default {
      * @param value
      */
     propertyValueSelected (propertyType, value) {
+      this.$router.push({query: this.queryParams()})
       this.filterItems()
+    },
+
+    queryParams () {
+      return {
+        Source: this.selected.Source.map((option) => option.value),
+        Level: this.selected.Level.map((option) => option.value),
+        Type: this.selected.Type.map((option) => option.value),
+        Theme: this.selected.Theme.map((option) => option.value),
+        Area: this.selected.Area.map((option) => option.value)
+      }
     },
 
     /**
