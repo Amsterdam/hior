@@ -182,11 +182,14 @@ export default {
      * @param value
      */
     propertyValueSelected (propertyType, value) {
-      this.$router.push({query: this.queryParams()})
+      this.$router.push({query: this.mapSelectedToQueryParams()})
       this.filterItems()
     },
 
-    queryParams () {
+    /**
+     * Maps the currently selected filters to a query object, consumable bij this.$router.push
+     */
+    mapSelectedToQueryParams () {
       return {
         Source: this.selected.Source.map((option) => option.value),
         Level: this.selected.Level.map((option) => option.value),
@@ -194,6 +197,22 @@ export default {
         Theme: this.selected.Theme.map((option) => option.value),
         Area: this.selected.Area.map((option) => option.value)
       }
+    },
+
+    /**
+     * Restore this.selected to supplied query parameters
+     * @param queryParams
+     */
+    setSelectedToQueryParams (queryParams) {
+      // reset the 'Heel Amsterdam' Area filter default if queryparams are supplied
+      if (Object.keys(queryParams).length > 0) {
+        this.selected['Area'] = []
+      }
+      Object.keys(this.selected).forEach((propertyType) => {
+        if (queryParams[propertyType] !== undefined) {
+          this.selected[propertyType] = this.propertyTypeValues(propertyType).filter(props => queryParams[propertyType].includes(props.value))
+        }
+      })
     },
 
     /**
@@ -259,6 +278,7 @@ export default {
   },
   mounted () {
     this.init()
+    this.setSelectedToQueryParams(this.$route.query)
   }
 }
 </script>
