@@ -128,6 +128,7 @@ export default {
     'textFilter' () {
       abortFilter()
       autoFilter = setTimeout(() => this.filterItems(), 250)
+      this.storeSearchStateInQueryParams()
     }
   },
   methods: {
@@ -187,7 +188,7 @@ export default {
     },
 
     /**
-     * Store the current search filters and orderBy in the URL as queryParams
+     * Store the current search filters, orderBy and textFilter in the URL as queryParams
      */
     storeSearchStateInQueryParams () {
       const queryParams = {
@@ -196,14 +197,15 @@ export default {
         Type: this.selected.Type.map((option) => option.value),
         Theme: this.selected.Theme.map((option) => option.value),
         Area: this.selected.Area.map((option) => option.value),
-        orderBy: this.orderBy
+        orderBy: this.orderBy,
+        textFilter: this.textFilter ? this.textFilter : undefined
       }
 
       this.$router.push({query: queryParams})
     },
 
     /**
-     * Restore the filters and orderBy from supplied query parameters
+     * Restore the filters, orderBy and textFilter from supplied query parameters
      * @param queryParams
      */
     restoreSearchStateFromQueryParams (queryParams) {
@@ -219,6 +221,7 @@ export default {
       if (queryParams.orderBy) {
         this.orderItemsBy(queryParams.orderBy)
       }
+      this.textFilter = queryParams.textFilter
     },
 
     /**
