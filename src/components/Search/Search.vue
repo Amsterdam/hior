@@ -182,28 +182,31 @@ export default {
      * @param value
      */
     propertyValueSelected (propertyType, value) {
-      this.$router.push({query: this.mapSelectedToQueryParams()})
+      this.storeSearchStateInQueryParams()
       this.filterItems()
     },
 
     /**
-     * Maps the currently selected filters to a query object, consumable bij this.$router.push
+     * Store the current search filters and orderBy in the URL as queryParams
      */
-    mapSelectedToQueryParams () {
-      return {
+    storeSearchStateInQueryParams () {
+      const queryParams = {
         Source: this.selected.Source.map((option) => option.value),
         Level: this.selected.Level.map((option) => option.value),
         Type: this.selected.Type.map((option) => option.value),
         Theme: this.selected.Theme.map((option) => option.value),
-        Area: this.selected.Area.map((option) => option.value)
+        Area: this.selected.Area.map((option) => option.value),
+        orderBy: this.orderBy
       }
+
+      this.$router.push({query: queryParams})
     },
 
     /**
-     * Restore this.selected to supplied query parameters
+     * Restore the filters and orderBy from supplied query parameters
      * @param queryParams
      */
-    setSelectedToQueryParams (queryParams) {
+    restoreSearchStateFromQueryParams (queryParams) {
       // reset the 'Heel Amsterdam' Area filter default if queryparams are supplied
       if (Object.keys(queryParams).length > 0) {
         this.selected['Area'] = []
@@ -213,6 +216,9 @@ export default {
           this.selected[propertyType] = this.propertyTypeValues(propertyType).filter(props => queryParams[propertyType].includes(props.value))
         }
       })
+      if (queryParams.orderBy) {
+        this.orderItemsBy(queryParams.orderBy)
+      }
     },
 
     /**
@@ -246,6 +252,7 @@ export default {
      */
     orderItemsBy (property) {
       this.orderBy = property
+      this.storeSearchStateInQueryParams()
     },
 
     /**
@@ -278,7 +285,7 @@ export default {
   },
   mounted () {
     this.init()
-    this.setSelectedToQueryParams(this.$route.query)
+    this.restoreSearchStateFromQueryParams(this.$route.query)
   }
 }
 </script>
