@@ -95,5 +95,6 @@ export default {
 <style scoped>
 .item-image {
   max-width: 250px;
+  max-height: 250px;
 }
 </style>
