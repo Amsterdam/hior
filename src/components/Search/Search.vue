@@ -5,7 +5,7 @@
         <!--Show property filters-->
         <div v-for="propType in propertyTypes" :key="propType" class="col-6 mb-1">
           <label :for="propType" class="mb-1">
-            {{propertyTypeName(propType)}}
+            {{propertyTypeDescription(propType)}}
           </label>
           <v-select multiple :id="propType"
                     v-model="selected[propType]"
@@ -72,7 +72,7 @@ import _ from 'lodash'
 
 import { filteredText, toHTML } from '@/services/util'
 import Card from '../Layout/Card'
-import { propertyTypeName, itemOrder, propertyOrder, linkItems, filterItems } from '@/services/hior'
+import { propertyTypeName, propertyTypeDescription, itemOrder, propertyOrder, linkItems, filterItems } from '@/services/hior'
 import SearchResult from './SearchResult'
 import ResultsHeader from './ResultsHeader'
 import SearchSort from './SearchSort'
@@ -150,6 +150,15 @@ export default {
      */
     propertyTypeName (propertyType) {
       return propertyTypeName([propertyType])
+    },
+
+    /**
+     * Return the description for the propertyType
+     * @param propertyType
+     * @returns {*}
+     */
+    propertyTypeDescription (propertyType) {
+      return propertyTypeDescription([propertyType])
     },
 
     /**
