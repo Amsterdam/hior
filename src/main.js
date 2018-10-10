@@ -8,6 +8,8 @@ import { mapActions } from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import vSelect from 'vue-select'
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
 
 import App from './App'
 import router from './router'
@@ -15,6 +17,7 @@ import store from './store'
 import { getAttributes, getItems, getProperties, getFAQ } from './services/hior'
 
 Vue.use(VueAxios, axios)
+Vue.use(Viewer)
 Vue.config.productionTip = false
 
 Vue.component('v-select', vSelect)

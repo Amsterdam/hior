@@ -8,11 +8,8 @@
     <div v-html="filteredText(item.htmlDescription, textFilter)"></div>
 
     <!--Images-->
-    <div class="mt-2">
-      <a v-for="img in item.Image" :key="img"
-         :href="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" target="_blank" :title="img">
-        <img class="item-image mr-3" :src="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" :alt="img">
-      </a>
+    <div v-viewer.static="{'rotatable': false, 'scalable': false, 'transition': false}" class="mt-2">
+      <img v-for="img in item.Image" :key="img" :title="img" :alt="img" :src="`${OBJECTSTORE_URL}Afbeeldingen/${img}`" class="item-image mr-3">
     </div>
 
     <!--The item properties-->
@@ -98,5 +95,6 @@ export default {
 <style scoped>
 .item-image {
   max-width: 250px;
+  max-height: 250px;
 }
 </style>

@@ -128,6 +128,7 @@ export default {
     'textFilter' () {
       abortFilter()
       autoFilter = setTimeout(() => this.filterItems(), 250)
+      this.storeSearchStateInQueryParams()
     }
   },
   methods: {
@@ -191,7 +192,45 @@ export default {
      * @param value
      */
     propertyValueSelected (propertyType, value) {
+      this.storeSearchStateInQueryParams()
       this.filterItems()
+    },
+
+    /**
+     * Store the current search filters, orderBy and textFilter in the URL as queryParams
+     */
+    storeSearchStateInQueryParams () {
+      const queryParams = {
+        Source: this.selected.Source.map((option) => option.value),
+        Level: this.selected.Level.map((option) => option.value),
+        Type: this.selected.Type.map((option) => option.value),
+        Theme: this.selected.Theme.map((option) => option.value),
+        Area: this.selected.Area.map((option) => option.value),
+        orderBy: this.orderBy,
+        textFilter: this.textFilter ? this.textFilter : undefined
+      }
+
+      this.$router.push({query: queryParams})
+    },
+
+    /**
+     * Restore the filters, orderBy and textFilter from supplied query parameters
+     * @param queryParams
+     */
+    restoreSearchStateFromQueryParams (queryParams) {
+      // reset the 'Heel Amsterdam' Area filter default if queryparams are supplied
+      if (Object.keys(queryParams).length > 0) {
+        this.selected['Area'] = []
+      }
+      Object.keys(this.selected).forEach((propertyType) => {
+        if (queryParams[propertyType] !== undefined) {
+          this.selected[propertyType] = this.propertyTypeValues(propertyType).filter(props => queryParams[propertyType].includes(props.value))
+        }
+      })
+      if (queryParams.orderBy) {
+        this.orderItemsBy(queryParams.orderBy)
+      }
+      this.textFilter = queryParams.textFilter
     },
 
     /**
@@ -225,6 +264,7 @@ export default {
      */
     orderItemsBy (property) {
       this.orderBy = property
+      this.storeSearchStateInQueryParams()
     },
 
     /**
@@ -257,6 +297,7 @@ export default {
   },
   mounted () {
     this.init()
+    this.restoreSearchStateFromQueryParams(this.$route.query)
   }
 }
 </script>
