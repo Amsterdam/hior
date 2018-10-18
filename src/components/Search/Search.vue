@@ -14,7 +14,9 @@
                     @input="propertyValueSelected(propType, selected[propType])"
                     :options="propertyTypeValues(propType)">
             <template slot="option" slot-scope="option">
-              {{ `${option.value} (${option.possibleCount})`}}
+              <div :title="propertyValueTooltipText(option.value)">
+                {{ `${option.value} (${option.possibleCount})`}}
+              </div>
             </template>
           </v-select>
         </div>
@@ -76,6 +78,8 @@ import { propertyTypeName, propertyTypeDescription, itemOrder, propertyOrder, li
 import SearchResult from './SearchResult'
 import ResultsHeader from './ResultsHeader'
 import SearchSort from './SearchSort'
+
+import tooltipTexts from '../../../static/texts/tooltipTexts'
 
 /**
  * autofilter timeout
@@ -184,6 +188,14 @@ export default {
           }
         })
       return _.orderBy(values.filter(v => v.possibleCount), ['sortKey'], ['asc'])
+    },
+
+    /**
+     * Return the tooltip text for the property value
+     * @param propertyValue
+     */
+    propertyValueTooltipText (propertyValue) {
+      return tooltipTexts[propertyValue]
     },
 
     /**
