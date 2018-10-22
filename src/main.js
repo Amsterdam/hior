@@ -44,6 +44,8 @@ let vueApp = new Vue({
      * @returns {Promise<void>}
      */
     async init () {
+      window.hideIntro && window.hideIntro() // Hide any introduction message
+
       const items = await getItems()
       const properties = await getProperties()
       const attributes = await getAttributes()
