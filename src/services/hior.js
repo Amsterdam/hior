@@ -10,7 +10,7 @@ const API = getAPIBaseUrl() + '/vsd'
  * @returns {Promise<Array>}
  */
 export async function getItems () {
-  return readPaginatedData(`${API}/hior_items`)
+  return readPaginatedData(`${API}/hior_items/`)
 }
 
 /**
@@ -18,7 +18,7 @@ export async function getItems () {
  * @returns {Promise<Array>}
  */
 export async function getProperties () {
-  return readPaginatedData(`${API}/hior_properties`)
+  return readPaginatedData(`${API}/hior_properties/`)
 }
 
 /**
@@ -26,7 +26,7 @@ export async function getProperties () {
  * @returns {Promise<Array>}
  */
 export async function getAttributes () {
-  return readPaginatedData(`${API}/hior_attributes`)
+  return readPaginatedData(`${API}/hior_attributes/`)
 }
 
 /**
@@ -34,7 +34,7 @@ export async function getAttributes () {
  * @returns {Promise<Array>}
  */
 export async function getFAQ () {
-  return readPaginatedData(`${API}/hior_faq`)
+  return readPaginatedData(`${API}/hior_faq/`)
 }
 
 /**
