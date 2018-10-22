@@ -10,5 +10,36 @@
     <div id="app"></div>
 
     <!-- built files will be auto injected -->
+
+    <!--A message to show when loading fails-->
+    <div class="container">
+      <div id="hior-intro"></div>
+    </div>
+
+    <script>
+      function getIntro () {
+        return document.querySelector('#hior-intro')
+      }
+
+      // When hideIntro has not been called by the app (load failure) a message will be displayed
+      function showIntro () {
+        var intro = getIntro()
+        intro && (intro.textContent = 'De site die u wilt bezoeken werkt niet op uw browser. De applicatie is geschikt voor recente versies van Chrome, Firefox en Safari.\n\nVoor ambtenaren van de gemeente Amsterdam is Mozilla Firefox beschikbaar op ADW. Druk hiervoor linksonder op uw scherm op de knop “start” en selecteer vervolgens Mozilla Firefox.');
+      }
+
+      // Function to be called on app start to prevent intro message
+      function hideIntro () {
+        var intro = getIntro()
+        intro && intro.remove()
+      }
+
+      // Wait for load complete. When this state is reached schedule the display of an intro message
+      // When the app successfully loaded and has called hideIntro() this message will not be displayed
+      function onReadyStateChange () {
+        document.readyState === 'complete' && showIntro();
+      }
+
+      document.onreadystatechange = onReadyStateChange
+    </script>
   </body>
 </html>
