@@ -19,6 +19,7 @@
                 :class="{'activelink': $route.name === link.name}">
           {{link.text}}
         </button>
+        <a class="btn btn-link menu-link" href="mailto:hior@amsterdam.nl?subject=Ik heb een vraag over HIOR Amsterdam">Vragen?</a>
       </nav>
     </div>
 
