@@ -1,14 +1,15 @@
 <template>
   <footer class="container-fluid mt-2 pt-2 pb-1">
-    <div>
+    <div class="container">
       <h2>Disclaimer</h2>
       <p>
-        Deze conceptversie van het Handboek Inrichting Openbare Ruimte is samengesteld door Verkeer & Openbare Ruimte.
+        Het Handboek Inrichting Openbare Ruimte is samengesteld door de directie Verkeer & Openbare Ruimte.
         De website is ontwikkeld door Datapunt.
       </p>
       <p>
-        Het HIOR is nog niet openbaar, alleen ambtenaren kunnen deze testversie bekijken.
-        De informatie op deze website wordt dagelijks aangepast, aangevuld en aangescherpt.
+        De informatie op deze website wordt regelmatig aangevuld op basis van nieuwe bestuurlijke besluiten.
+        <span v-if="lastUpdated">De laatste aanpassing vond plaats op {{ lastUpdated }}.</span>
+        Het HIOR Amsterdam heeft op zichzelf géén bestuurlijke status. De achterliggende beleidsdocumenten zijn leidend.
       </p>
       <p>
         V&OR en Datapunt kunnen niet aansprakelijk worden gesteld voor de juistheid, volledigheid en actualiteit van de website.
@@ -29,7 +30,8 @@ export default {
   ],
   data () {
     return {
-      author: 'Datapunt'
+      author: 'Datapunt',
+      lastUpdated: null
     }
   }
 }
