@@ -23,16 +23,42 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
   name: 'AMSFooter',
+  computed: {
+    ...mapGetters([
+      'metadata'
+    ]),
+    lastUpdated: function () {
+      return this.properties.last_updated ? moment(this.properties.last_updated).format('DD-MM-YYYY') : null
+    }
+  },
   props: [
     'title'
   ],
   data () {
     return {
       author: 'Datapunt',
-      lastUpdated: null
+      properties: {}
     }
+  },
+  watch: {
+    'metadata' (to, from) {
+      this.init()
+    }
+  },
+  methods: {
+    init () {
+      this.properties = this.metadata && this.metadata.length
+        ? this.metadata.reduce((object, element) =>
+          Object.assign(object, {[element.property]: element.value}), {}
+        ) : {}
+    }
+  },
+  mounted () {
+    this.init()
   }
 }
 </script>

@@ -14,7 +14,7 @@ import 'viewerjs/dist/viewer.css'
 import App from './App'
 import router from './router'
 import store from './store'
-import { getAttributes, getItems, getProperties, getFAQ } from './services/hior'
+import { getAttributes, getItems, getProperties, getFAQ, getMetadata } from './services/hior'
 
 Vue.use(VueAxios, axios)
 Vue.use(Viewer)
@@ -36,7 +36,8 @@ let vueApp = new Vue({
       setItems: 'setItems',
       setProperties: 'setProperties',
       setAttributes: 'setAttributes',
-      setFAQ: 'setFAQ'
+      setFAQ: 'setFAQ',
+      setMetadata: 'setMetadata'
     }),
 
     /**
@@ -50,11 +51,13 @@ let vueApp = new Vue({
       const properties = await getProperties()
       const attributes = await getAttributes()
       const faq = await getFAQ()
+      const metadata = await getMetadata()
 
       this.setItems(items)
       this.setProperties(properties)
       this.setAttributes(attributes)
       this.setFAQ(faq)
+      this.setMetadata(metadata)
     }
   }
 })

@@ -9,7 +9,8 @@ export default new Vuex.Store({
     items: null,
     properties: null,
     attributes: null,
-    faq: null
+    faq: null,
+    metadata: null
   },
   actions: {
     // Actions are available to manipulate the state
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     setAttributes (store, attributes) {
       store.commit('attributes', attributes)
+    },
+    setMetadata (store, metadata) {
+      store.commit('metadata', metadata)
     }
   },
   mutations: {
@@ -46,6 +50,9 @@ export default new Vuex.Store({
     },
     attributes (state, attributes) {
       state.attributes = attributes
+    },
+    metadata (state, metadata) {
+      state.metadata = metadata
     }
   },
   getters: {
@@ -67,6 +74,9 @@ export default new Vuex.Store({
     },
     attributes: state => {
       return state.attributes
+    },
+    metadata: state => {
+      return state.metadata
     }
   }
 })
