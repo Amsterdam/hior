@@ -37,10 +37,11 @@ export default {
   text-decoration: none;
 }
 .prop-image {
-  height: 55px;
-  margin-top: -16px;
+  height: 49px;
+  margin-top: -13px;
   margin-left: -10px;
   margin-right: 20px;
+  margin-bottom: 3px;
 }
 .prop-text {
   vertical-align: top;

@@ -38,6 +38,14 @@ export async function getFAQ () {
 }
 
 /**
+ * Get the metadata; property, value
+ * @returns {Promise<Array>}
+ */
+export async function getMetadata () {
+  return readPaginatedData(`${API}/hior_metadata/`)
+}
+
+/**
  * Link HIOR items with its properties and attributes
  * Each of these gets an property of the HIOR item
  * @param items
