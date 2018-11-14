@@ -1,5 +1,6 @@
 /**
- * Replaces each occurrence of filterText (case-insensitive) in text by a span with class "filterText".
+ * Replaces each occurrence of filterText (case-insensitive) in text by a span with class "filterText",
+ * except when the matched word starts with 'href=' to prevent broken hyperlinks.
  * Class filterText specifies how the filtered text should be formatted (e.g. color: "red") and is defined elsewhere
  * @param text
  * @param filterText
@@ -7,7 +8,7 @@
  */
 export const filteredText = (text, filterText) => {
   // $& Inserts the matched substring
-  return filterText ? text.replace(RegExp(filterText, 'ig'), `<span class="filterText">$&</span>`) : text
+  return filterText ? text.replace(RegExp(`(?<!href=[\\S]+)${filterText}`, 'ig'), `<span class="filterText">$&</span>`) : text
 }
 
 export const toHTML = text => {
