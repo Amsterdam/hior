@@ -8,7 +8,7 @@
  */
 export const filteredText = (text, filterText) => {
   // $& Inserts the matched substring
-  return filterText ? text.replace(RegExp(`(?<!href=[\\S]+)${filterText}`, 'ig'), `<span class="filterText">$&</span>`) : text
+  return filterText ? text.replace(RegExp(`(?<!href=[\\S]*)${filterText}`, 'ig'), `<span class="filterText">$&</span>`) : text
 }
 
 export const toHTML = text => {
