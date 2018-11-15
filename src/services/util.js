@@ -7,8 +7,13 @@
  * @returns {*}
  */
 export const filteredText = (text, filterText) => {
-  // $& Inserts the matched substring
-  return filterText ? text.replace(RegExp(`(?<!href=[\\S]*)${filterText}`, 'ig'), `<span class="filterText">$&</span>`) : text
+  const addSpan = (match, p1) => {
+    if (p1 && p1.startsWith('href=')) {
+      return match
+    }
+    return `<span class="filterText">${match}</span>`
+  }
+  return filterText ? text.replace(RegExp(`(href=[\\S]*)|(${filterText})`, 'ig'), addSpan) : text
 }
 
 export const toHTML = text => {
