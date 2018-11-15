@@ -1,4 +1,4 @@
-FROM node:10.7
+FROM node:8.9
 
 MAINTAINER datapunt.ois@amsterdam.nl
 
