@@ -263,7 +263,7 @@ export default {
      */
     filterItems () {
       const matchedItems = filterItems(this.items, this.selected, this.textFilter)
-      this.matchedItems = _.orderBy(matchedItems, ['sortKey'], ['asc'])
+      this.matchedItems = _.orderBy(matchedItems, this.orderBy === 'Theme' ? ['themeSortKey'] : ['sortKey'], ['asc'])
     },
 
     /**
@@ -276,6 +276,7 @@ export default {
      */
     orderItemsBy (property) {
       this.orderBy = property
+      this.filterItems()
       this.storeSearchStateInQueryParams()
     },
 
@@ -302,6 +303,7 @@ export default {
           item.htmlText = toHTML(item.text)
           item.htmlDescription = toHTML(item.description)
           item.sortKey = itemOrder(item)
+          item.themeSortKey = item.sortKey.substring(3)
         })
         this.clear()
       }
