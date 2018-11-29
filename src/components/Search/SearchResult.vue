@@ -29,7 +29,7 @@
           </td>
         </tr>
         <tr v-if="item.Link">
-          <th scope="row" colspan="2">Zie ook:</th>
+          <th scope="row" colspan="2">Achtergrondinformatie:</th>
         </tr>
         <tr v-if="item.Link">
           <th colspan="2">
