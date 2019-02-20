@@ -10,13 +10,14 @@ In deze applicatie kan beleid worden gezocht:
 - Per beleidsproduct, bijvoorbeeld alle hoofdlijnen van de 'visie openbare ruimte' of de 'nota parkeernormen'
 
 De data hiervoor wordt door An-Jes Oudshoorn bijgehouden in de spreadsheet.
-Het spreadsheet en de bijbehorende documenten en plaatjes bevinden zich in Objectstore.
+De spreadsheet en de bijbehorende documenten en plaatjes bevinden zich in Objectstore.
 
 De documenten en plaatjes worden direct van Objectstore gelezen (objectstore service)
 
-Het spreadsheet wordt eerst verwerkt en vertaald.
+De spreadsheet wordt eerst verwerkt en vertaald.
 Vervolgens wordt de data via een API (vsd/hior_... endpoints) beschikbaar gesteld voor verdere verwerking.
 In <https://github.com/Amsterdam/various_small_datasets/tree/master/src/hior/import> bevindt zich de code daarvoor.
+Op het laatste tabblad van de spreadsheet wordt automatisch de datum van de laatste aanpassing opgeslagen en ook via de API beschikbaar gesteld, zodat de frontend de datum van de laatste aanpassing kan tonen.
 
 ## Requirements
 
