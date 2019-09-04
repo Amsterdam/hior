@@ -3,7 +3,7 @@
 > Handboek Inrichting Openbare Ruimte
 
 Het HIOR is een integrale verzameling van het vigerend beleid voor de inrichting van de openbare ruimte in Amsterdam.
-Het HIOR helpt opdrachtgevers, projectleiders, ontwerpers, adviseurs en beheerders om invuilling te geven aan het Amsterdamse beleid.
+Het HIOR helpt opdrachtgevers, projectleiders, ontwerpers, adviseurs en beheerders om invulling te geven aan het Amsterdamse beleid.
 
 In deze applicatie kan beleid worden gezocht:
 - Per thema, bijvoorbeeld 'fiets', 'voetganger', 'groen', 'water & oevers' en 'straatmeubilair'
@@ -16,7 +16,7 @@ De documenten en plaatjes worden direct van Objectstore gelezen (objectstore ser
 
 De spreadsheet wordt eerst verwerkt en vertaald.
 Vervolgens wordt de data via een API (vsd/hior_... endpoints) beschikbaar gesteld voor verdere verwerking.
-In <https://github.com/Amsterdam/various_small_datasets/tree/master/src/hior/import> bevindt zich de code daarvoor.
+In (https://github.com/Amsterdam/various_small_datasets/tree/master/src/hior/importer) bevindt zich de code daarvoor.
 Op het laatste tabblad van de spreadsheet wordt automatisch de datum van de laatste aanpassing opgeslagen en ook via de API beschikbaar gesteld, zodat de frontend de datum van de laatste aanpassing kan tonen.
 
 ## Requirements
@@ -25,9 +25,9 @@ Op het laatste tabblad van de spreadsheet wordt automatisch de datum van de laat
 
     node >= 6.0
     npm >= 3.0
-    
+
     Access to https://acc.api.data.amsterdam.nl (underlying API)
-    
+
 ### for deployment
 
     docker
