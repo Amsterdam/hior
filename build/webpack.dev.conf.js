@@ -22,12 +22,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     })
   },
 
-  optimization: {
-    runtimeChunk: {
-      name: "runtime"
-    }
-  },
-
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
 
