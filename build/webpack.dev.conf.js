@@ -8,6 +8,7 @@ const baseWebpackConfig = require("./webpack.base.conf");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const portfinder = require("portfinder");
 
 const HOST = process.env.HOST;
@@ -20,6 +21,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       usePostCSS: true
     })
   },
+
+  optimization: {
+    runtimeChunk: {
+      name: "runtime"
+    }
+  },
+
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
 
@@ -72,7 +80,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         to: config.dev.assetsSubDirectory,
         ignore: [".*"]
       }
-    ])
+    ]),
+    new MiniCssExtractPlugin()
   ]
 });
 
@@ -102,6 +111,7 @@ module.exports = new Promise((resolve, reject) => {
             : undefined
         })
       );
+      console.log("--------------------------------------", devWebpackConfig);
 
       resolve(devWebpackConfig);
     }

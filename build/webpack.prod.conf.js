@@ -9,7 +9,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCSSPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const { default: chalk } = require("chalk");
 
 const env =
   process.env.NODE_ENV === "testing"
@@ -36,7 +36,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       "process.env": env
     }),
-    new UglifyJsPlugin({
+    new webpack.UglifyJsPlugin({
       uglifyOptions: {
         compress: {
           warnings: false
@@ -97,19 +97,22 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "manifest",
-      minChunks: Infinity
-    }),
+
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: "manifest",
+    //   minChunks: Infinity
+    // }),
+
     // This instance extracts shared chunks from code splitted chunks and bundles them
     // in a separate chunk, similar to the vendor chunk
-    // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "app",
-      async: "vendor-async",
-      children: true,
-      minChunks: 3
-    }),
+    // see: https://webpack.js.org/plugins/SplitChunksPluginnk-plugin/#extra-async-commons-chunk
+
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: "app",
+    //   async: "vendor-async",
+    //   children: true,
+    //   minChunks: 3s
+    // }),
 
     // copy custom static assets
     new CopyWebpackPlugin([
